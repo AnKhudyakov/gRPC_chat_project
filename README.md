@@ -5,7 +5,7 @@ Things you need to run this application
 
 1. Node npm
 2. Docker
-3. protoc (version 3.20.x important! version 3.21.x not work, see [issue](https://github.com/protocolbuffers/protobuf-javascript/issues/127)
+3. protoc (version 3.20.x important! version 3.21.x not work, see [issue](https://github.com/protocolbuffers/protobuf-javascript/issues/127))
 
 
 ### `Run the project`
