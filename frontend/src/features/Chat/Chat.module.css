@@ -1,0 +1,11 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+.chatList,
+.chatWindow {
+  margin: 20px;
+  min-height: 600px;
+  border: 2px solid;
+}
