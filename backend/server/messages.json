@@ -3,12 +3,14 @@
     {
       "id": 1,
       "userId": 4,
-      "text": "Hello"
+      "senderUsername": 5,
+      "message": "Hello"
     },
     {
       "id": 2,
       "userId": 5,
-      "text": "Hi"
+      "senderUsername": 4,
+      "message": "Hi"
     }
   ]
 }

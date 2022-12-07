@@ -31,17 +31,17 @@ export function Login() {
   } = useForm();
 
   const onSubmit = (e) => {
-    console.log(e);
+    //console.log(e);
     const loginReq = new LoginRequest();
-    console.log("loginReq", loginReq);
+    //console.log("loginReq", loginReq);
     loginReq.setUsername(e.username);
     loginReq.setPassword(e.password);
-    console.log("CLIENT", client);
+    //console.log("CLIENT", client);
     client.login(loginReq, {}, (err, resp) => {
       if (err) throw err;
       console.log("RESPONSE Message", resp.getMessage());
       console.log("RESPONSE", resp);
-      console.log(resp.getAccessToken());
+      //console.log(resp.getAccessToken());
       let userObjectLogin = jwt_decode(resp.getAccessToken());
       console.log("DecodeToken", userObjectLogin);
       const id = resp.getId();
@@ -56,7 +56,7 @@ export function Login() {
     const chatReq = new StreamRequest();
     (() => {
       chatReq.setId(user.id);
-      console.log("user.id",user.id);
+      //console.log("user.id", user.id);
       const chatStream = client.chatStream(chatReq);
       console.log("Starting chatStream");
       chatStream.on("data", (response) => {

@@ -5,6 +5,7 @@ const getToken = require("./internal-function/getToken");
 const addNewUser = require("./internal-function/addNewUser");
 const isAuthenticated = require("./internal-function/isAuthenticated");
 const getUsers = require("./internal-function/getUsers");
+const getMessages = require("./internal-function/getMessages");
 const PROTO_PATH = __dirname + "/proto/auth.proto";
 const PORT = 9090;
 const findId = require("./internal-function/findId");
@@ -79,7 +80,8 @@ function doUserStream(call) {
   updateStatusUser(id);
   // get Users list
   const users = getUsers(id);
-  stream.write({ users });
+  console.log(users);
+  call.write({ users });
 }
 
 function doChatStream(call) {
@@ -89,8 +91,10 @@ function doChatStream(call) {
   // change Status Online
   //updateStatusUser(id);
   // get Users list
-  const messages = getMessages();
-  stream.write({ messages });
+  const messages = getMessages(id);
+  //console.log(messages);
+  //console.log(call);
+  call.write({ messages });
 }
 
 function getServer() {
