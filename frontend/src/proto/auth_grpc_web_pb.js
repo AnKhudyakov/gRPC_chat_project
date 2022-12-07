@@ -8,7 +8,7 @@
 // versions:
 // 	protoc-gen-grpc-web v1.4.2
 // 	protoc              v3.20.3
-// source: auth.proto
+// source: proto/auth.proto
 
 
 /* eslint-disable */
@@ -19,6 +19,8 @@
 const grpc = {};
 grpc.web = require('grpc-web');
 
+
+var google_protobuf_empty_pb = require('google-protobuf/google/protobuf/empty_pb.js')
 const proto = {};
 proto.auth = require('./auth_pb.js');
 
@@ -139,13 +141,13 @@ proto.auth.AuthServicePromiseClient.prototype.login =
  * @const
  * @type {!grpc.web.MethodDescriptor<
  *   !proto.auth.RegisterRequest,
- *   !proto.auth.TokenResponse>}
+ *   !proto.auth.RegisterResponse>}
  */
 const methodDescriptor_AuthService_Register = new grpc.web.MethodDescriptor(
   '/auth.AuthService/Register',
   grpc.web.MethodType.UNARY,
   proto.auth.RegisterRequest,
-  proto.auth.TokenResponse,
+  proto.auth.RegisterResponse,
   /**
    * @param {!proto.auth.RegisterRequest} request
    * @return {!Uint8Array}
@@ -153,7 +155,7 @@ const methodDescriptor_AuthService_Register = new grpc.web.MethodDescriptor(
   function(request) {
     return request.serializeBinary();
   },
-  proto.auth.TokenResponse.deserializeBinary
+  proto.auth.RegisterResponse.deserializeBinary
 );
 
 
@@ -162,9 +164,9 @@ const methodDescriptor_AuthService_Register = new grpc.web.MethodDescriptor(
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.auth.TokenResponse)}
+ * @param {function(?grpc.web.RpcError, ?proto.auth.RegisterResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.auth.TokenResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.auth.RegisterResponse>|undefined}
  *     The XHR Node Readable Stream
  */
 proto.auth.AuthServiceClient.prototype.register =
@@ -183,7 +185,7 @@ proto.auth.AuthServiceClient.prototype.register =
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.auth.TokenResponse>}
+ * @return {!Promise<!proto.auth.RegisterResponse>}
  *     Promise that resolves to the response
  */
 proto.auth.AuthServicePromiseClient.prototype.register =
@@ -193,6 +195,179 @@ proto.auth.AuthServicePromiseClient.prototype.register =
       request,
       metadata || {},
       methodDescriptor_AuthService_Register);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.auth.MessageRequest,
+ *   !proto.google.protobuf.Empty>}
+ */
+const methodDescriptor_AuthService_SendMessage = new grpc.web.MethodDescriptor(
+  '/auth.AuthService/SendMessage',
+  grpc.web.MethodType.UNARY,
+  proto.auth.MessageRequest,
+  google_protobuf_empty_pb.Empty,
+  /**
+   * @param {!proto.auth.MessageRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  google_protobuf_empty_pb.Empty.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.auth.MessageRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.google.protobuf.Empty)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.google.protobuf.Empty>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.auth.AuthServiceClient.prototype.sendMessage =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/auth.AuthService/SendMessage',
+      request,
+      metadata || {},
+      methodDescriptor_AuthService_SendMessage,
+      callback);
+};
+
+
+/**
+ * @param {!proto.auth.MessageRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.google.protobuf.Empty>}
+ *     Promise that resolves to the response
+ */
+proto.auth.AuthServicePromiseClient.prototype.sendMessage =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/auth.AuthService/SendMessage',
+      request,
+      metadata || {},
+      methodDescriptor_AuthService_SendMessage);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.auth.StreamRequest,
+ *   !proto.auth.UserStreamResponse>}
+ */
+const methodDescriptor_AuthService_UserStream = new grpc.web.MethodDescriptor(
+  '/auth.AuthService/UserStream',
+  grpc.web.MethodType.SERVER_STREAMING,
+  proto.auth.StreamRequest,
+  proto.auth.UserStreamResponse,
+  /**
+   * @param {!proto.auth.StreamRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.auth.UserStreamResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.auth.StreamRequest} request The request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!grpc.web.ClientReadableStream<!proto.auth.UserStreamResponse>}
+ *     The XHR Node Readable Stream
+ */
+proto.auth.AuthServiceClient.prototype.userStream =
+    function(request, metadata) {
+  return this.client_.serverStreaming(this.hostname_ +
+      '/auth.AuthService/UserStream',
+      request,
+      metadata || {},
+      methodDescriptor_AuthService_UserStream);
+};
+
+
+/**
+ * @param {!proto.auth.StreamRequest} request The request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!grpc.web.ClientReadableStream<!proto.auth.UserStreamResponse>}
+ *     The XHR Node Readable Stream
+ */
+proto.auth.AuthServicePromiseClient.prototype.userStream =
+    function(request, metadata) {
+  return this.client_.serverStreaming(this.hostname_ +
+      '/auth.AuthService/UserStream',
+      request,
+      metadata || {},
+      methodDescriptor_AuthService_UserStream);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.auth.StreamRequest,
+ *   !proto.auth.StreamMessage>}
+ */
+const methodDescriptor_AuthService_ChatStream = new grpc.web.MethodDescriptor(
+  '/auth.AuthService/ChatStream',
+  grpc.web.MethodType.SERVER_STREAMING,
+  proto.auth.StreamRequest,
+  proto.auth.StreamMessage,
+  /**
+   * @param {!proto.auth.StreamRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.auth.StreamMessage.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.auth.StreamRequest} request The request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!grpc.web.ClientReadableStream<!proto.auth.StreamMessage>}
+ *     The XHR Node Readable Stream
+ */
+proto.auth.AuthServiceClient.prototype.chatStream =
+    function(request, metadata) {
+  return this.client_.serverStreaming(this.hostname_ +
+      '/auth.AuthService/ChatStream',
+      request,
+      metadata || {},
+      methodDescriptor_AuthService_ChatStream);
+};
+
+
+/**
+ * @param {!proto.auth.StreamRequest} request The request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!grpc.web.ClientReadableStream<!proto.auth.StreamMessage>}
+ *     The XHR Node Readable Stream
+ */
+proto.auth.AuthServicePromiseClient.prototype.chatStream =
+    function(request, metadata) {
+  return this.client_.serverStreaming(this.hostname_ +
+      '/auth.AuthService/ChatStream',
+      request,
+      metadata || {},
+      methodDescriptor_AuthService_ChatStream);
 };
 
 

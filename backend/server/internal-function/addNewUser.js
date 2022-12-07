@@ -32,7 +32,12 @@ const addNewUser = (request) => {
     const last_item_id = dataUsers.users.length;
     console.log("ID", last_item_id);
     //Add new user
-    dataUsers.users.push({ id: last_item_id + 1, username, password }); //add some data
+    dataUsers.users.push({
+      id: last_item_id + 1,
+      username,
+      password,
+      status: "OFFLINE",
+    }); //add some data
     fs.writeFileSync("./users.json", JSON.stringify(dataUsers));
     console.log("Added new user");
   });
@@ -41,3 +46,4 @@ const addNewUser = (request) => {
 };
 
 module.exports = addNewUser;
+module.exports = userdb;

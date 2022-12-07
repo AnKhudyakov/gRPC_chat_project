@@ -7,6 +7,6 @@ export interface LoginRequest {
 }
 
 export interface LoginRequest__Output {
-  'username': (string);
-  'password': (string);
+  'username'?: (string);
+  'password'?: (string);
 }

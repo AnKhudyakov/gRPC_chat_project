@@ -8,7 +8,7 @@ function createToken(payload) {
 const getToken = (request) => {
   const { username } = request;
   const token = createToken({ username });
-  console.log("Access Token:" + token);
+  //console.log("Access Token:" + token);
   return token;
 };
 
