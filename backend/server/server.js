@@ -9,6 +9,7 @@ const getMessages = require("./internal-function/getMessages");
 const PROTO_PATH = __dirname + "/proto/auth.proto";
 const PORT = 9090;
 const findId = require("./internal-function/findId");
+const _ = require("lodash");
 
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
@@ -94,7 +95,12 @@ function doChatStream(call) {
   const messages = getMessages(id);
   //console.log(messages);
   //console.log(call);
-  call.write({ messages });
+  for (const message of messages) {
+    //const { id, message, senderUsername } = message;
+    //console.log(id,message,senderUsername),;
+    console.log("message", message);
+    call.write(message);
+  }
 }
 
 function getServer() {
