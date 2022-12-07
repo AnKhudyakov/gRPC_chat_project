@@ -1,5 +1,6 @@
-const fs = require("fs");
-const userdb = JSON.parse(fs.readFileSync("./users.json", "UTF-8"));
+//const fs = require("fs");
+const userdb = require("./addNewUser");
+//const userdb = JSON.parse(fs.readFileSync("./users.json", "UTF-8"));
 
 const isAuthenticated = ({ username, password }) => {
   let counter = 0;
@@ -8,7 +9,7 @@ const isAuthenticated = ({ username, password }) => {
       counter += 1;
     }
   });
-  console.log("ISAUTH:", counter);
+  //console.log("ISAUTH:", counter);
   return counter;
 };
 module.exports = isAuthenticated;

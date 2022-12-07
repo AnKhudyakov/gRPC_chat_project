@@ -4,8 +4,10 @@ const protoLoader = require("@grpc/proto-loader");
 const getToken = require("./internal-function/getToken");
 const addNewUser = require("./internal-function/addNewUser");
 const isAuthenticated = require("./internal-function/isAuthenticated");
+const getUsers = require("./internal-function/getUsers");
 const PROTO_PATH = __dirname + "/proto/auth.proto";
 const PORT = 9090;
+const findId = require("./internal-function/findId");
 
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
@@ -48,7 +50,6 @@ function doRegistration(call, callback) {
   //response
   callback(null, {
     message: call.request.username + "! Your registation Success!",
-    access_token: token,
   });
 }
 
@@ -58,13 +59,36 @@ function doLogin(call, callback) {
   if (isAuthenticated({ username, password }) === 0) {
     callback(new Error("Incorrect email or password"));
   }
+  // find Id
+  const id = findId(username);
   //create new Token
   const token = getToken(call.request);
   // response
   callback(null, {
     message: "You logined as " + call.request.username,
+    id,
     access_token: token,
   });
+}
+
+function doUserStream(call) {
+  const { id } = call.request;
+  if (!id) return call.end();
+  // change Status Online
+  updateStatusUser(id);
+  // get Users list
+  const users = getUsers(id);
+  stream.write({ users });
+}
+
+function doChatStream(call) {
+  const { id } = call.request;
+  if (!id) return call.end();
+  // change Status Online
+  //updateStatusUser(id);
+  // get Users list
+  const messages = getMessages();
+  stream.write({ messages });
 }
 
 function getServer() {
@@ -72,6 +96,8 @@ function getServer() {
   server.addService(auth.AuthService.service, {
     Register: doRegistration,
     Login: doLogin,
+    UserStream: doUserStream,
+    ChatStream: doChatStream,
   });
   return server;
 }

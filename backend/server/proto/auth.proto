@@ -1,10 +1,14 @@
 syntax = "proto3";
+import "google/protobuf/empty.proto";
 
 package auth;
 
 service AuthService {
   rpc Login(LoginRequest) returns (TokenResponse);
-  rpc Register(RegisterRequest) returns (TokenResponse);
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc SendMessage(MessageRequest) returns (google.protobuf.Empty) {};
+  rpc UserStream(StreamRequest) returns (stream UserStreamResponse) {};
+  rpc ChatStream(StreamRequest) returns (stream StreamMessage) {};
 }
 
 message LoginRequest {
@@ -17,7 +21,44 @@ message RegisterRequest {
   string password = 2;
 }
 
-message TokenResponse {
+message RegisterResponse {
   string message = 1;
-  string access_token = 2;
+}
+
+message TokenResponse {
+  int32 id = 1;
+  string message = 2;
+  string access_token = 3;
+}
+
+message StreamRequest {
+  int32 id = 1;
+}
+
+message UserStreamResponse {
+  repeated User users = 1;
+}
+
+enum Status {
+  UNKOWN = 0;
+  ONLINE = 1;
+  OFFLINE = 2;
+}
+
+message User {
+  int32 id = 1;
+  string username = 2;
+  Status status = 3;
+  int32 access_token = 4;
+}
+
+message StreamMessage {
+  int32 id = 1;
+  string sender_username = 2;
+  string message = 3;
+}
+
+message MessageRequest {
+  int32 id = 1;
+  string message = 2;
 }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styles from "./Chat.module.css";
+import { client } from "../Auth/Auth";
 
 export function Chat() {
   return (
