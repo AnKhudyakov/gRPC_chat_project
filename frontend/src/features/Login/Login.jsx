@@ -56,7 +56,7 @@ export function Login() {
     const chatReq = new StreamRequest();
     (() => {
       chatReq.setId(user.id);
-      console.log(user.id);
+      console.log("user.id",user.id);
       const chatStream = client.chatStream(chatReq);
       console.log("Starting chatStream");
       chatStream.on("data", (response) => {

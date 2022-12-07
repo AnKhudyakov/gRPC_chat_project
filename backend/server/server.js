@@ -73,6 +73,7 @@ function doLogin(call, callback) {
 
 function doUserStream(call) {
   const { id } = call.request;
+  console.log("ID_USER_STREAM", id);
   if (!id) return call.end();
   // change Status Online
   updateStatusUser(id);
@@ -83,6 +84,7 @@ function doUserStream(call) {
 
 function doChatStream(call) {
   const { id } = call.request;
+  console.log("ID_CHAT_STREAM", id);
   if (!id) return call.end();
   // change Status Online
   //updateStatusUser(id);
