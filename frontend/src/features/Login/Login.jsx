@@ -18,10 +18,14 @@ import {
 import { client } from "../Auth/Auth";
 import { Chat } from "../Chat/Chat";
 import jwt_decode from "jwt-decode";
+import { useState } from "react";
 
 export function Login() {
+  const state = useSelector((state) => state.chatPage);
+  console.log("state", state);
   const user = useSelector((state) => state.authPage.user);
   const dispatch = useDispatch();
+  const [msgList, setMsgList] = useState([]);
   const {
     register,
     handleSubmit,
@@ -63,8 +67,10 @@ export function Login() {
         console.log("STREAM_RESPONSE", response);
         const msgList = response.toObject();
         console.log("Messages", msgList);
-        //dispatch(setMessages(msg));
       });
+      setMsgList((prev) => [...prev, msgList]);
+      console.log("MESSAGE", msgList);
+      dispatch(setMessages(msgList));
     })();
 
     (() => {
@@ -119,7 +125,7 @@ export function Login() {
         </div>
       ) : (
         <div>
-          <Chat />
+          <Chat msgList={msgList} />
         </div>
       )}
     </div>
