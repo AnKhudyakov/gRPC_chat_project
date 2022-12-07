@@ -5,9 +5,11 @@ const getToken = require("./internal-function/getToken");
 const addNewUser = require("./internal-function/addNewUser");
 const isAuthenticated = require("./internal-function/isAuthenticated");
 const getUsers = require("./internal-function/getUsers");
+const getMessages = require("./internal-function/getMessages");
 const PROTO_PATH = __dirname + "/proto/auth.proto";
 const PORT = 9090;
 const findId = require("./internal-function/findId");
+const _ = require("lodash");
 
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
@@ -73,22 +75,32 @@ function doLogin(call, callback) {
 
 function doUserStream(call) {
   const { id } = call.request;
+  console.log("ID_USER_STREAM", id);
   if (!id) return call.end();
   // change Status Online
   updateStatusUser(id);
   // get Users list
   const users = getUsers(id);
-  stream.write({ users });
+  console.log(users);
+  call.write({ users });
 }
 
 function doChatStream(call) {
   const { id } = call.request;
+  console.log("ID_CHAT_STREAM", id);
   if (!id) return call.end();
   // change Status Online
   //updateStatusUser(id);
   // get Users list
-  const messages = getMessages();
-  stream.write({ messages });
+  const messages = getMessages(id);
+  //console.log(messages);
+  //console.log(call);
+  for (const message of messages) {
+    //const { id, message, senderUsername } = message;
+    //console.log(id,message,senderUsername),;
+    console.log("message", message);
+    call.write(message);
+  }
 }
 
 function getServer() {

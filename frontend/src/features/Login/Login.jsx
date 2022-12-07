@@ -18,10 +18,14 @@ import {
 import { client } from "../Auth/Auth";
 import { Chat } from "../Chat/Chat";
 import jwt_decode from "jwt-decode";
+import { useState } from "react";
 
 export function Login() {
+  const state = useSelector((state) => state.chatPage);
+  console.log("state", state);
   const user = useSelector((state) => state.authPage.user);
   const dispatch = useDispatch();
+  const [msgList, setMsgList] = useState([]);
   const {
     register,
     handleSubmit,
@@ -31,17 +35,17 @@ export function Login() {
   } = useForm();
 
   const onSubmit = (e) => {
-    console.log(e);
+    //console.log(e);
     const loginReq = new LoginRequest();
-    console.log("loginReq", loginReq);
+    //console.log("loginReq", loginReq);
     loginReq.setUsername(e.username);
     loginReq.setPassword(e.password);
-    console.log("CLIENT", client);
+    //console.log("CLIENT", client);
     client.login(loginReq, {}, (err, resp) => {
       if (err) throw err;
       console.log("RESPONSE Message", resp.getMessage());
       console.log("RESPONSE", resp);
-      console.log(resp.getAccessToken());
+      //console.log(resp.getAccessToken());
       let userObjectLogin = jwt_decode(resp.getAccessToken());
       console.log("DecodeToken", userObjectLogin);
       const id = resp.getId();
@@ -56,15 +60,17 @@ export function Login() {
     const chatReq = new StreamRequest();
     (() => {
       chatReq.setId(user.id);
-      console.log(user.id);
+      //console.log("user.id", user.id);
       const chatStream = client.chatStream(chatReq);
       console.log("Starting chatStream");
       chatStream.on("data", (response) => {
         console.log("STREAM_RESPONSE", response);
         const msgList = response.toObject();
         console.log("Messages", msgList);
-        //dispatch(setMessages(msg));
       });
+      setMsgList((prev) => [...prev, msgList]);
+      console.log("MESSAGE", msgList);
+      dispatch(setMessages(msgList));
     })();
 
     (() => {
@@ -119,7 +125,7 @@ export function Login() {
         </div>
       ) : (
         <div>
-          <Chat />
+          <Chat msgList={msgList} />
         </div>
       )}
     </div>
