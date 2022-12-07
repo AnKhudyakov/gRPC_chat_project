@@ -22,7 +22,6 @@ import { useState } from "react";
 
 export function Login() {
   const state = useSelector((state) => state.chatPage);
-  console.log("state", state);
   const user = useSelector((state) => state.authPage.user);
   const dispatch = useDispatch();
   const [msgList, setMsgList] = useState([]);
@@ -43,11 +42,11 @@ export function Login() {
     //console.log("CLIENT", client);
     client.login(loginReq, {}, (err, resp) => {
       if (err) throw err;
-      console.log("RESPONSE Message", resp.getMessage());
-      console.log("RESPONSE", resp);
+      //console.log("RESPONSE Message", resp.getMessage());
+      //console.log("RESPONSE", resp);
       //console.log(resp.getAccessToken());
       let userObjectLogin = jwt_decode(resp.getAccessToken());
-      console.log("DecodeToken", userObjectLogin);
+      //console.log("DecodeToken", userObjectLogin);
       const id = resp.getId();
       const username = e.username;
       dispatch(setUser({ id, username }));
@@ -66,11 +65,11 @@ export function Login() {
       chatStream.on("data", (response) => {
         console.log("STREAM_RESPONSE", response);
         const msgList = response.toObject();
-        console.log("Messages", msgList);
+        setMsgList((prev) => [...prev, msgList]);
+        //dispatch(setMessages(msgList));
       });
-      setMsgList((prev) => [...prev, msgList]);
-      console.log("MESSAGE", msgList);
-      dispatch(setMessages(msgList));
+      // setMsgList((prev) => [...prev, msgList]);
+      // dispatch(setMessages(msgList));
     })();
 
     (() => {
