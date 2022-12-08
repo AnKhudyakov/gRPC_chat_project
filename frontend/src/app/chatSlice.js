@@ -10,7 +10,7 @@ export const chatSlice = createSlice({
   initialState,
   reducers: {
     setMessages: (state, action) => {
-      state.messages = [...action.payload];
+      state.messages = [...state.messages, action.payload];
     },
     setUsers: (state, action) => {
       state.users = [...action.payload];

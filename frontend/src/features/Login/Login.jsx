@@ -21,10 +21,10 @@ import jwt_decode from "jwt-decode";
 import { useState } from "react";
 
 export function Login() {
-  const state = useSelector((state) => state.chatPage);
+  const msgList = useSelector((state) => state.chatPage.messages);
   const user = useSelector((state) => state.authPage.user);
   const dispatch = useDispatch();
-  const [msgList, setMsgList] = useState([]);
+  //const [msgList, setMsgList] = useState([]);
   const {
     register,
     handleSubmit,
@@ -65,8 +65,9 @@ export function Login() {
       chatStream.on("data", (response) => {
         console.log("STREAM_RESPONSE", response);
         const msgList = response.toObject();
-        setMsgList((prev) => [...prev, msgList]);
-        //dispatch(setMessages(msgList));
+        //setMsgList((prev) => [...prev, msgList]);
+        dispatch(setMessages(msgList));
+        console.log("msgList", msgList);
       });
       // setMsgList((prev) => [...prev, msgList]);
       // dispatch(setMessages(msgList));
@@ -76,7 +77,7 @@ export function Login() {
       const userListStream = client.userStream(chatReq);
       console.log("Starting userStream");
       userListStream.on("data", (response) => {
-        console.log("STREAM_RESPONSE", response);
+        console.log("STREAM_RESPONSE_USER", response);
         const { usersList } = response.toObject();
         console.log("usersList", usersList);
         //dispatch(setUsers(usersList));
