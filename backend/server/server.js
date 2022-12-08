@@ -9,6 +9,7 @@ const getMessages = require("./internal-function/getMessages");
 const PROTO_PATH = __dirname + "/proto/auth.proto";
 const PORT = 9090;
 const findId = require("./internal-function/findId");
+const updateStatusUser = require('./internal-function/updateStatusUser')
 const _ = require("lodash");
 
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
