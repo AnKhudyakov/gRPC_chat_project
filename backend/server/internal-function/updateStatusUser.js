@@ -13,7 +13,10 @@ const updateStatusUser = (id) => {
     }
     return user
   });
-  fs.writeFileSync("./users.json", JSON.stringify(dataUsers));
+  const users = {
+    users: dataUsers
+  }
+  fs.writeFileSync("./users.json", JSON.stringify(users, null, "\t"));
   return;
 };
 
