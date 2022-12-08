@@ -1,10 +1,12 @@
 const fs = require("fs");
+const logs = require("../helpers/logs");
 
 const userdb = JSON.parse(fs.readFileSync("./users.json", "UTF-8"));
 
 // Check if the user exists in database
 function isUsernameAlreadyExist(UserName) {
   console.log(
+    logs.data,
     "IS_USERNAME_EXIST",
     userdb.users.filter((user) => user.username === UserName).length
   );
@@ -13,7 +15,7 @@ function isUsernameAlreadyExist(UserName) {
 
 const addNewUser = (request) => {
   const { username, password } = request;
-  console.log("REQUEST", request);
+  console.log(logs.data, "REQUEST", request);
   if (isUsernameAlreadyExist(username) > 0) {
     return;
   }
@@ -27,7 +29,7 @@ const addNewUser = (request) => {
 
     // Get current users data
     const dataUsers = JSON.parse(data.toString());
-    console.log("dataUsers", dataUsers);
+    console.log(logs.data, "dataUsers", dataUsers);
     // Get the id of last user
     const last_item_id = dataUsers.users.length;
     console.log("ID", last_item_id);
@@ -39,7 +41,7 @@ const addNewUser = (request) => {
       status: "OFFLINE",
     }); //add some data
     fs.writeFileSync("./users.json", JSON.stringify(dataUsers));
-    console.log("Added new user");
+    console.log(logs.info, "Added new user");
   });
 
   return true;
