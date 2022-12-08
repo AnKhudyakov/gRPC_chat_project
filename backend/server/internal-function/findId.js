@@ -1,7 +1,8 @@
+const logs = require("../helpers/logs");
 const userdb = require("./addNewUser");
 
 const findId = (username) => {
-  console.log("username", username);
+  console.log(logs.data, "username ", username);
   //
   const [{ id }] = userdb.users.filter((user) => {
     return user.username == username;
