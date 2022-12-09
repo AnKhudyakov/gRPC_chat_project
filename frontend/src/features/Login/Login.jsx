@@ -48,7 +48,7 @@ export function Login() {
       //console.log("user.id", user.id);
       const chatStream = client.chatStream(chatReq);
       //console.log("chatStream", chatStream.on);
-      //console.log("Starting chatStream");
+      console.log("Starting chatStream");
       chatStream.on("data", (response) => {
         console.log("STREAM_RESPONSE", response);
         const msgList = response.toObject();

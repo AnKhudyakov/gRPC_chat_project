@@ -98,16 +98,17 @@ function doChatStream(call) {
   const messages = getMessages(id);
   //console.log(messages);
   //console.log(call);
-  for (const [userId, userCall] of msgStreamClients) {
-    //const { id, message, senderUsername } = message;
-    //console.log(id,message,senderUsername),;
+  for (let [userId, userCall] of msgStreamClients) {
     if (userId != id) {
-      console.log(logs.data, "messages:", messages);
-      userCall.write(messages);
+      for (let msg of messages) {
+        console.log(logs.data, "messages:", msg);
+        userCall.write(msg);
+      }
     }
   }
   if (msgStreamClients.get(id) === undefined) {
     msgStreamClients.set(id, call);
+    console.log("MAPMSGS", msgStreamClients);
   }
 
   // findUser (id, (user)=>{

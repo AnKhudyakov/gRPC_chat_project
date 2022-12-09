@@ -15,9 +15,9 @@ const updateStatusUser = (id) => {
     return user;
   });
   const users = {
-    users: dataUsers
-  }
-  console.log("dataUsers =", users);
+    users: dataUsers,
+  };
+  //console.log("dataUsers =", users);
   fs.writeFileSync("./users.json", JSON.stringify(users));
   return;
 };

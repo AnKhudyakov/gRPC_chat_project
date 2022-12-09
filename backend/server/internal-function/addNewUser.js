@@ -29,10 +29,10 @@ const addNewUser = (request) => {
 
     // Get current users data
     const dataUsers = JSON.parse(data.toString());
-    console.log(logs.data, "dataUsers", dataUsers);
+    //console.log(logs.data, "dataUsers", dataUsers);
     // Get the id of last user
     const last_item_id = dataUsers.users.length;
-    console.log("ID", last_item_id);
+    //console.log("ID", last_item_id);
     //Add new user
     dataUsers.users.push({
       id: last_item_id + 1,
@@ -41,7 +41,7 @@ const addNewUser = (request) => {
       status: "OFFLINE",
     }); //add some data
     fs.writeFileSync("./users.json", JSON.stringify(dataUsers));
-    console.log(logs.info, "Added new user");
+    //console.log(logs.info, "Added new user");
   });
 
   return true;
