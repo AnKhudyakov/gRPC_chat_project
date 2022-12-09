@@ -47,13 +47,17 @@ export function Login() {
       chatReq.setId(user.id);
       //console.log("user.id", user.id);
       const chatStream = client.chatStream(chatReq);
-      console.log("Starting chatStream");
+      //console.log("chatStream", chatStream.on);
+      //console.log("Starting chatStream");
       chatStream.on("data", (response) => {
         console.log("STREAM_RESPONSE", response);
         const msgList = response.toObject();
         //setMsgList((prev) => [...prev, msgList]);
         dispatch(setMessages(msgList));
         console.log("msgList", msgList);
+      });
+      chatStream.on("status", (status) => {
+        console.log("STATUS", status);
       });
       // setMsgList((prev) => [...prev, msgList]);
       // dispatch(setMessages(msgList));

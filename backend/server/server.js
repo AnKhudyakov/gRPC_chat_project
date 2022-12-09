@@ -6,12 +6,12 @@ const addNewUser = require("./internal-function/addNewUser");
 const isAuthenticated = require("./internal-function/isAuthenticated");
 const getUsers = require("./internal-function/getUsers");
 const getMessages = require("./internal-function/getMessages");
-const updateStatusUser = require("./internal-function/updateStatusUser")
+const updateStatusUser = require("./internal-function/updateStatusUser");
 const PROTO_PATH = __dirname + "/proto/auth.proto";
 const PORT = 9090;
 const findId = require("./internal-function/findId");
 const _ = require("lodash");
-const logs = require('./helpers/logs')
+const logs = require("./helpers/logs");
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -21,6 +21,9 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 });
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 const auth = protoDescriptor.auth;
+
+const msgStreamClients = new Map();
+const userStreamClients = new Map();
 
 function main() {
   const server = getServer();
@@ -81,7 +84,7 @@ function doUserStream(call) {
   updateStatusUser(id);
   // get Users list
   const users = getUsers(id);
-  console.log(logs.data, 'Updated user status', users);
+  console.log(logs.data, "Updated user status", users);
   call.write({ users });
 }
 
@@ -95,12 +98,22 @@ function doChatStream(call) {
   const messages = getMessages(id);
   //console.log(messages);
   //console.log(call);
-  for (const message of messages) {
+  for (const [userId, userCall] of msgStreamClients) {
     //const { id, message, senderUsername } = message;
     //console.log(id,message,senderUsername),;
-    console.log(logs.data, "message:", message);
-    call.write(message);
+    if (userId != id) {
+      console.log(logs.data, "messages:", messages);
+      call.write(messages);
+    }
   }
+  if (msgStreamClients.get(id) === undefined) {
+    msgStreamClients.set(id, call);
+  }
+
+  // findUser (id, (user)=>{
+  //   updateStatusUser(id)
+  //   getMessages(id)
+  // })
 }
 
 function getServer() {
