@@ -1,22 +1,60 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { setMessages } from "../../app/chatSlice"
 import styles from "./Chat.module.css";
 import { client } from "../Auth/Auth";
+import { MessageRequest } from "../../proto/auth_pb"
+import { useEffect } from "react";
 
-export function Chat(props) {
-  console.log("props", props);
+export function Chat({msgList}) {
+
+  const [value, setValue] = useState("")
+  const user = useSelector((state) => state.authPage.user)
+  const dispatch = useDispatch()
+
+  const sendMessageHandler = (e) => {
+    e.preventDefault()
+    const msgReq = new MessageRequest()
+    console.log(msgReq)
+    msgReq.setMessage(value)
+    msgReq.setId(user.id)
+    client.sendMessage(msgReq, {} , (err,resp) => {})
+    dispatch(setMessages({
+      id: Math.round(Math.random()*1000),
+      senderUsername: user.username,
+      message: value,
+    }))
+  }
+
+
   return (
     <div className={styles.container}>
       <div className={styles.chatList}>ChatList</div>
       <div className={styles.chatWindow}>
         <div>ChatWindow</div>
         <div>
-          {props.msgList.map((msg) => (
+          {msgList.map((msg) => (
             <div key={msg.id}>
-              Sender:{msg.senderUsername} Message{msg.message}
+              Sender:{msg.senderUsername} 
+              Message{msg.message}
             </div>
           ))}
         </div>
+        <div>
+          <input 
+          type="text" 
+          value={value} 
+          onChange={(e) => setValue(e.target.value)}
+          className="sendMessage"
+          />
+          <button 
+          type="submit"
+          onClick={sendMessageHandler}  
+          >
+            Submit
+          </button>
+        </div>
+
       </div>
     </div>
   );
