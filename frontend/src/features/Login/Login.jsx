@@ -19,6 +19,7 @@ import { client } from "../Auth/Auth";
 import { Chat } from "../Chat/Chat";
 import jwt_decode from "jwt-decode";
 import { useState } from "react";
+import { gRPC } from "../../api/gRPC";
 
 export function Login() {
   const msgList = useSelector((state) => state.chatPage.messages);
@@ -35,22 +36,7 @@ export function Login() {
 
   const onSubmit = (e) => {
     //console.log(e);
-    const loginReq = new LoginRequest();
-    //console.log("loginReq", loginReq);
-    loginReq.setUsername(e.username);
-    loginReq.setPassword(e.password);
-    //console.log("CLIENT", client);
-    client.login(loginReq, {}, (err, resp) => {
-      if (err) throw err;
-      //console.log("RESPONSE Message", resp.getMessage());
-      //console.log("RESPONSE", resp);
-      //console.log(resp.getAccessToken());
-      let userObjectLogin = jwt_decode(resp.getAccessToken());
-      //console.log("DecodeToken", userObjectLogin);
-      const id = resp.getId();
-      const username = e.username;
-      dispatch(setUser({ id, username }));
-    });
+    gRPC.Login(e, dispatch);
   };
 
   useEffect(() => {
@@ -61,6 +47,7 @@ export function Login() {
       chatReq.setId(user.id);
       //console.log("user.id", user.id);
       const chatStream = client.chatStream(chatReq);
+      //console.log("chatStream", chatStream.on);
       console.log("Starting chatStream");
       chatStream.on("data", (response) => {
         console.log("STREAM_RESPONSE", response);
@@ -68,6 +55,9 @@ export function Login() {
         //setMsgList((prev) => [...prev, msgList]);
         dispatch(setMessages(msgList));
         console.log("msgList", msgList);
+      });
+      chatStream.on("status", (status) => {
+        console.log("STATUS", status);
       });
       // setMsgList((prev) => [...prev, msgList]);
       // dispatch(setMessages(msgList));

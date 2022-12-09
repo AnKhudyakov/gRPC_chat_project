@@ -6,7 +6,7 @@ const getUsers = (id) => {
   const users = userdb.users.filter((user) => {
     return user.id == id && user.status == "ONLINE";
   });
-  console.log("USERS_ONLINE", users);
+  //console.log("USERS_ONLINE", users);
   return users;
 };
 
