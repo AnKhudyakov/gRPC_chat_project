@@ -81,7 +81,7 @@ function doUserStream(call) {
   console.log(logs.data, "ID_USER_STREAM:", id);
   if (!id) return call.end();
   // change Status Online
-  updateStatusUser(id);
+  //updateStatusUser(id);
   // get Users list
   const users = getUsers(id);
   console.log(logs.data, "Updated user status", users);
@@ -98,6 +98,14 @@ function doChatStream(call) {
   const messages = getMessages(id);
   //console.log(messages);
   //console.log(call);
+  for (let msg of messages) {
+    call.write(msg);
+  }
+  //signal change MESSAGES then sendMessage
+  if (msgStreamClients.get(id) === undefined) {
+    msgStreamClients.set(id, call);
+    console.log("MAPMSGS", msgStreamClients);
+  }
   for (let [userId, userCall] of msgStreamClients) {
     if (userId != id) {
       for (let msg of messages) {
@@ -106,10 +114,10 @@ function doChatStream(call) {
       }
     }
   }
-  if (msgStreamClients.get(id) === undefined) {
-    msgStreamClients.set(id, call);
-    console.log("MAPMSGS", msgStreamClients);
-  }
+  // if (msgStreamClients.get(id) === undefined) {
+  //   msgStreamClients.set(id, call);
+  //   console.log("MAPMSGS", msgStreamClients);
+  // }
 
   // findUser (id, (user)=>{
   //   updateStatusUser(id)
