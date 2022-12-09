@@ -103,7 +103,7 @@ function doChatStream(call) {
     //console.log(id,message,senderUsername),;
     if (userId != id) {
       console.log(logs.data, "messages:", messages);
-      call.write(messages);
+      userCall.write(messages);
     }
   }
   if (msgStreamClients.get(id) === undefined) {
