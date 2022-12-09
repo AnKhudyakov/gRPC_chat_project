@@ -10,6 +10,7 @@ import {
   TokenResponse,
 } from "../../proto/auth_pb";
 import { AuthServiceClient } from "../../proto/auth_grpc_web_pb";
+import { gRPC } from "../../api/gRPC";
 
 export const client = new AuthServiceClient("http://localhost:8080");
 
@@ -25,18 +26,7 @@ export function Auth() {
   } = useForm();
 
   const onSubmit = (e) => {
-    console.log(e);
-    const registerReq = new RegisterRequest();
-    console.log("registerReq", registerReq);
-    registerReq.setUsername(e.username);
-    registerReq.setPassword(e.password);
-    //console.log(client);
-    client.register(registerReq, {}, (err, resp) => {
-      if (err) throw err;
-      console.log("RESPONSE", resp.getMessage());
-      //const id = resp.getId();
-      //setUser({ id, name, avatar });
-    });
+    gRPC.Registration(e);
   };
 
   return (
