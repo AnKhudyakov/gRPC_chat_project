@@ -4,7 +4,6 @@ import { setMessages } from "../../app/chatSlice"
 import styles from "./Chat.module.css";
 import { client } from "../Auth/Auth";
 import { MessageRequest } from "../../proto/auth_pb"
-import { useEffect } from "react";
 
 export function Chat({msgList}) {
 
@@ -34,9 +33,13 @@ export function Chat({msgList}) {
         <div>ChatWindow</div>
         <div>
           {msgList.map((msg) => (
-            <div key={msg.id}>
-              Sender:{msg.senderUsername} 
-              Message{msg.message}
+            <div className={styles.message} key={msg.id}>
+              <div>
+                Sender:{msg.senderUsername} 
+              </div>
+              <div>
+                Message{msg.message}
+              </div>
             </div>
           ))}
         </div>
