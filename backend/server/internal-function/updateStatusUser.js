@@ -8,10 +8,7 @@ const updateStatusUser = (id) => {
     if (user.id == id && user.status == "OFFLINE") {
       user.status = "ONLINE";
       return user;
-    } else if (user.id == id && user.status == "ONLINE") {
-      user.status = "OFFLINE";
-      return user;
-    }
+    } 
     return user;
   });
   const users = {

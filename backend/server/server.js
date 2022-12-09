@@ -7,6 +7,7 @@ const isAuthenticated = require("./internal-function/isAuthenticated");
 const getUsers = require("./internal-function/getUsers");
 const getMessages = require("./internal-function/getMessages");
 const updateStatusUser = require("./internal-function/updateStatusUser")
+const sendMessage = require("./internal-function/sendMessage")
 const PROTO_PATH = __dirname + "/proto/auth.proto";
 const PORT = 9090;
 const findId = require("./internal-function/findId");
@@ -103,6 +104,14 @@ function doChatStream(call) {
   }
 }
 
+function doSendMessage(call, callback) {
+  const { id, message } = call.request
+  const users = getUsers(id)
+  sendMessage(id, message)
+  const arr = getMessages(id)
+  console.log(id, message, arr)
+}
+
 function getServer() {
   const server = new grpc.Server();
   server.addService(auth.AuthService.service, {
@@ -110,6 +119,7 @@ function getServer() {
     Login: doLogin,
     UserStream: doUserStream,
     ChatStream: doChatStream,
+    sendMessage: doSendMessage,
   });
   return server;
 }
