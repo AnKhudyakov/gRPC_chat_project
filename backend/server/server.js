@@ -115,6 +115,7 @@ function doChatStream(call) {
       }
     }
   }
+  
   // if (msgStreamClients.get(id) === undefined) {
   //   msgStreamClients.set(id, call);
   //   console.log("MAPMSGS", msgStreamClients);
@@ -124,6 +125,13 @@ function doChatStream(call) {
   //   updateStatusUser(id)
   //   getMessages(id)
   // })
+}
+
+function doSendMessage(call, callback) {
+  const { id, message } = call.request
+  const users = getUsers(id)
+  sendMessage(id, message)
+  callback(null, err)
 }
 
 function getServer() {
