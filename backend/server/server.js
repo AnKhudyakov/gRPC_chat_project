@@ -6,6 +6,7 @@ const addNewUser = require("./internal-function/addNewUser");
 const isAuthenticated = require("./internal-function/isAuthenticated");
 const getUsers = require("./internal-function/getUsers");
 const getMessages = require("./internal-function/getMessages");
+const sendMessage = require("./internal-function/sendMessage");
 const updateStatusUser = require("./internal-function/updateStatusUser");
 const PROTO_PATH = __dirname + "/proto/auth.proto";
 const PORT = 9090;
@@ -77,15 +78,29 @@ function doLogin(call, callback) {
     access_token: token,
   });
 }
+
 function doUserStream(call) {
   const { id } = call.request;
   console.log(logs.data, "ID_USER_STREAM:", id);
   if (!id) return call.end();
   // change Status Online
-  updateStatusUser(id)
-  const online = getOnline()
-  console.log(online)
-  call.write({ users: online })
+  updateStatusUser(id);
+  const online = getOnline();
+  console.log("ONLINE", online);
+  call.write({ users: online });
+
+  //if first time stream set in Map
+  if (userStreamClients.get(id) === undefined) {
+    userStreamClients.set(id, call);
+    //console.log("MAPusers", userStreamClients);
+  }
+  //send messages all the users in Map
+  for (let [userId, userCall] of userStreamClients) {
+    if (userId != id) {
+      console.log(logs.data, "usersNew:", online);
+      userCall.write({ users: online });
+    }
+  }
 }
 
 function doChatStream(call) {
@@ -97,16 +112,18 @@ function doChatStream(call) {
   // get Users list
   const messages = getMessages(id);
 
-  console.log(logs.test, "Messages 101", messages);
+  //console.log(logs.test, "Messages 101", messages);
   //console.log(call);
   for (let msg of messages) {
     call.write(msg);
   }
   //signal change MESSAGES then sendMessage
+  //if first time stream set in Map
   if (msgStreamClients.get(id) === undefined) {
     msgStreamClients.set(id, call);
     // console.log("MAPMSGS", msgStreamClients);
   }
+  //send messages all the users in Map
   for (let [userId, userCall] of msgStreamClients) {
     if (userId != id) {
       for (let msg of messages) {
@@ -115,7 +132,7 @@ function doChatStream(call) {
       }
     }
   }
-  
+
   // if (msgStreamClients.get(id) === undefined) {
   //   msgStreamClients.set(id, call);
   //   console.log("MAPMSGS", msgStreamClients);
@@ -128,10 +145,10 @@ function doChatStream(call) {
 }
 
 function doSendMessage(call, callback) {
-  const { id, message } = call.request
-  const users = getUsers(id)
-  sendMessage(id, message)
-  callback(null, err)
+  const { id, message } = call.request;
+  const users = getUsers(id);
+  sendMessage(id, message);
+  callback(null, err);
 }
 
 function getServer() {
@@ -141,6 +158,7 @@ function getServer() {
     Login: doLogin,
     UserStream: doUserStream,
     ChatStream: doChatStream,
+    SendMessage: doSendMessage,
   });
   return server;
 }
