@@ -14,8 +14,9 @@ const updateStatusUser = (id) => {
   const users = {
     users: dataUsers
   }
-  fs.writeFileSync("./users.json", JSON.stringify(users, null, "\t"));
-  return;
+  fs.writeFileSync("./users.json", JSON.stringify(users));
+  const usersOnline = users.users.filter(user => user.status === "ONLINE")
+  return usersOnline;
 };
 
 module.exports = updateStatusUser;

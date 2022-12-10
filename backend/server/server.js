@@ -7,12 +7,12 @@ const isAuthenticated = require("./internal-function/isAuthenticated");
 const getUsers = require("./internal-function/getUsers");
 const getMessages = require("./internal-function/getMessages");
 const updateStatusUser = require("./internal-function/updateStatusUser");
+const sendMessage = require("./internal-function/sendMessage");
 const PROTO_PATH = __dirname + "/proto/auth.proto";
 const PORT = 9090;
 const findId = require("./internal-function/findId");
 const _ = require("lodash");
 const logs = require("./helpers/logs");
-const getOnline = require("./internal-function/getOnline");
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -82,10 +82,9 @@ function doUserStream(call) {
   console.log(logs.data, "ID_USER_STREAM:", id);
   if (!id) return call.end();
   // change Status Online
-  updateStatusUser(id)
-  const online = getOnline()
-  console.log(online)
-  call.write({ users: online })
+  const online = updateStatusUser(id)
+  console.log("ONLINE", online)
+  call.write({ users: online})
 }
 
 function doChatStream(call) {
@@ -141,6 +140,7 @@ function getServer() {
     Login: doLogin,
     UserStream: doUserStream,
     ChatStream: doChatStream,
+    SendMessage: doSendMessage,
   });
   return server;
 }
