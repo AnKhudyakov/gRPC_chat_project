@@ -8,17 +8,13 @@ const updateStatusUser = (id) => {
     if (user.id == id && user.status == "OFFLINE") {
       user.status = "ONLINE";
       return user;
-    } else if (user.id == id && user.status == "ONLINE") {
-      user.status = "OFFLINE";
-      return user;
-    }
+    } 
     return user;
   });
   const users = {
-    users: dataUsers,
-  };
-  //console.log("dataUsers =", users);
-  fs.writeFileSync("./users.json", JSON.stringify(users));
+    users: dataUsers
+  }
+  fs.writeFileSync("./users.json", JSON.stringify(users, null, "\t"));
   return;
 };
 

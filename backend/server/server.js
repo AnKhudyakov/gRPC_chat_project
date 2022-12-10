@@ -12,6 +12,7 @@ const PORT = 9090;
 const findId = require("./internal-function/findId");
 const _ = require("lodash");
 const logs = require("./helpers/logs");
+const getOnline = require("./internal-function/getOnline");
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -81,11 +82,10 @@ function doUserStream(call) {
   console.log(logs.data, "ID_USER_STREAM:", id);
   if (!id) return call.end();
   // change Status Online
-  //updateStatusUser(id);
-  // get Users list
-  const users = getUsers(id);
-  console.log(logs.data, "Updated user status", users);
-  call.write({ users });
+  updateStatusUser(id)
+  const online = getOnline()
+  console.log(online)
+  call.write({ users: online })
 }
 
 function doChatStream(call) {
@@ -93,10 +93,11 @@ function doChatStream(call) {
   console.log(logs.data, "ID_CHAT_STREAM:", id);
   if (!id) return call.end();
   // change Status Online
-  //updateStatusUser(id);
+  // updateStatusUser(id);
   // get Users list
   const messages = getMessages(id);
-  //console.log(messages);
+
+  console.log(logs.test, "Messages 101", messages);
   //console.log(call);
   for (let msg of messages) {
     call.write(msg);
@@ -104,7 +105,7 @@ function doChatStream(call) {
   //signal change MESSAGES then sendMessage
   if (msgStreamClients.get(id) === undefined) {
     msgStreamClients.set(id, call);
-    console.log("MAPMSGS", msgStreamClients);
+    // console.log("MAPMSGS", msgStreamClients);
   }
   for (let [userId, userCall] of msgStreamClients) {
     if (userId != id) {
