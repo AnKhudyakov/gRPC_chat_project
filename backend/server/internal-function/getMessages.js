@@ -1,11 +1,10 @@
 const fs = require("fs");
 const logs = require("../helpers/logs");
 
-const messagedb = JSON.parse(fs.readFileSync("./messages.json", "UTF-8"));
-
 const getMessages = (id) => {
   //console.log(logs.data, "ID", id);
   //find message with userFrom
+  const messagedb = JSON.parse(fs.readFileSync("./messages.json", "UTF-8"));
   const messages = messagedb.messages.filter((message) => {
     return message.idFrom == id || message.idTo == id;
   });
