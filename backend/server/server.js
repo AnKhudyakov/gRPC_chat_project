@@ -100,48 +100,45 @@ function doUserStream(call) {
 }
 
 function doChatStream(call) {
+  //id == idTo
   const { id } = call.request;
   console.log(logs.data, "ID_CHAT_STREAM:", id);
   if (!id) return call.end();
   // change Status Online
   // updateStatusUser(id);
-  // get Users list
-  const messages = getMessages(id);
-
-  console.log(logs.test, "Messages 101", messages);
+  //console.log(logs.test, "Messages 101", messages);
   //console.log(call);
+
+  //need do unar request getMessages
+  /*
   for (let msg of messages) {
     call.write(msg);
-  }
-  //signal change MESSAGES then sendMessage
+  }*/
+
   if (msgStreamClients.get(id) === undefined) {
     msgStreamClients.set(id, call);
     // console.log("MAPMSGS", msgStreamClients);
   }
+  // get messages list
+  const messages = getMessages(id);
   for (let [userId, userCall] of msgStreamClients) {
-    if (userId != id) {
+    if ((userId = id)) {
       for (let msg of messages) {
+        //send msg reciver
         console.log(logs.data, "messages:", msg);
         userCall.write(msg);
       }
     }
   }
-
-  // if (msgStreamClients.get(id) === undefined) {
-  //   msgStreamClients.set(id, call);
-  //   console.log("MAPMSGS", msgStreamClients);
-  // }
-
-  // findUser (id, (user)=>{
-  //   updateStatusUser(id)
-  //   getMessages(id)
-  // })
 }
 
 function doSendMessage(call, callback) {
+  //id == idTo
   const { id, message } = call.request;
-  const users = getUsers(id);
-  sendMessage(id, message);
+  //const users = getUsers(id);
+  const messagedb = sendMessage(id, message);
+  console.log("MsgsDB with last msg", messagedb);
+  doChatStream(call);
   callback(null, err);
 }
 
