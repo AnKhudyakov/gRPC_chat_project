@@ -1,16 +1,1 @@
-{
-  "messages": [
-    {
-      "id": 1,
-      "userId": 4,
-      "sender_username": "test2",
-      "message": "Hello"
-    },
-    {
-      "id": 2,
-      "userId": 5,
-      "sender_username": "test",
-      "message": "Hi"
-    }
-  ]
-}
+{"messages":[{"id":1,"userId":4,"sender_username":"test2","message":"Hello"},{"id":2,"userId":5,"sender_username":"test","message":"Hi"},{"id":990,"userId":5,"sender_username":"test2","message":"Здаров"},{"id":321,"userId":4,"sender_username":"test","message":"крыша"},{"id":34,"userId":4,"sender_username":"test","message":"крыша"},{"id":559,"userId":5,"sender_username":"test2","message":"Здаров"},{"id":484,"userId":4,"sender_username":"test","message":"крыша"},{"id":961,"userId":5,"sender_username":"test2","message":"Здаров"}]}

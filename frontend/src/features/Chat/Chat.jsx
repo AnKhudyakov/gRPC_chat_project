@@ -4,6 +4,7 @@ import { setMessages, setMessageReq } from "../../app/chatSlice"
 import styles from "./Chat.module.css";
 import { client } from "../Auth/Auth";
 import { MessageRequest } from "../../proto/auth_pb"
+import { ChatList } from "../../components";
 
 export function Chat({msgList}) {
 
@@ -27,7 +28,10 @@ export function Chat({msgList}) {
   
   return (
     <div className={styles.container}>
-      <div className={styles.chatList}>ChatList</div>
+      <div className={styles.chatList}>
+        ChatList
+        <ChatList/>
+      </div>
       <div className={styles.chatWindow}>
         <div>ChatWindow</div>
         <div>

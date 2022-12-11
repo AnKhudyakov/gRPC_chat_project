@@ -43,13 +43,14 @@ export function Login() {
     if (!user) return;
     console.log("USER", user);
     const chatReq = new StreamRequest();
+    chatReq.setId(user.id);
+
     (() => {
-      chatReq.setId(user.id);
       //console.log("user.id", user.id);
       const chatStream = client.chatStream(chatReq);
-      //console.log("chatStream", chatStream.on);
-      console.log("Starting chatStream");
+      // console.log("chatStream", chatStream.on);
       chatStream.on("data", (response) => {
+        console.log("Starting chatStream");
         console.log("STREAM_RESPONSE", response);
         const msgList = response.toObject();
         //setMsgList((prev) => [...prev, msgList]);
@@ -64,14 +65,16 @@ export function Login() {
     })();
 
     (() => {
-      const userListStream = client.userStream(chatReq);
-      console.log("Starting userStream");
-      userListStream.on("data", (response) => {
-        console.log("STREAM_RESPONSE_USER", response);
-        const { usersList } = response.toObject();
-        console.log("usersList", usersList);
-        //dispatch(setUsers(usersList));
+      const userStream = client.userStream(chatReq);
+      
+      userStream.on("data", (response) => {
+        console.log("Sarting userStream")
+        console.log("USER_RESPONSE", response)
+        const usersList = response.toObject();
+        console.log('UsersList', usersList)
+        dispatch(setUsers(usersList.usersList));
       });
+
     })();
   }, [user]);
 
