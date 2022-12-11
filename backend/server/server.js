@@ -82,9 +82,21 @@ function doUserStream(call) {
   console.log(logs.data, "ID_USER_STREAM:", id);
   if (!id) return call.end();
   // change Status Online
-  const online = updateStatusUser(id)
-  console.log("ONLINE", online)
-  call.write({ users: online})
+  const online = updateStatusUser(id);
+  console.log("ONLINE", online);
+  call.write({ users: online });
+
+  if (userStreamClients.get(id) === undefined) {
+    userStreamClients.set(id, call);
+    //console.log("MAPusers", userStreamClients);
+  }
+  //send usersList all the users in Map
+  for (let [userId, userCall] of userStreamClients) {
+    if (userId != id) {
+      console.log(logs.data, "usersNew:", online);
+      userCall.write({ users: online });
+    }
+  }
 }
 
 function doChatStream(call) {
@@ -114,7 +126,7 @@ function doChatStream(call) {
       }
     }
   }
-  
+
   // if (msgStreamClients.get(id) === undefined) {
   //   msgStreamClients.set(id, call);
   //   console.log("MAPMSGS", msgStreamClients);
@@ -127,10 +139,10 @@ function doChatStream(call) {
 }
 
 function doSendMessage(call, callback) {
-  const { id, message } = call.request
-  const users = getUsers(id)
-  sendMessage(id, message)
-  callback(null, err)
+  const { id, message } = call.request;
+  const users = getUsers(id);
+  sendMessage(id, message);
+  callback(null, err);
 }
 
 function getServer() {
