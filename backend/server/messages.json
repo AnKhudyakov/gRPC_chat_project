@@ -1,6 +1,6 @@
 {
   "messages": [
-    { "id": 1, "userId": 4, "sender_username": "test2", "message": "Hello" },
-    { "id": 2, "userId": 5, "sender_username": "test", "message": "Hi" }
+    { "id": 1, "idFrom": 4, "idTo": 5, "message": "Hello" },
+    { "id": 2, "idFrom": 5, "idTo": 4, "message": "Hi" }
   ]
 }

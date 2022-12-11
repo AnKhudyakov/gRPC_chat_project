@@ -9,7 +9,6 @@ const isAuthenticated = ({ username, password }) => {
       counter += 1;
     }
   });
-  //console.log("ISAUTH:", counter);
   return counter;
 };
 module.exports = isAuthenticated;

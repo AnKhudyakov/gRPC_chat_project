@@ -4,7 +4,6 @@ const protoLoader = require("@grpc/proto-loader");
 const getToken = require("./internal-function/getToken");
 const addNewUser = require("./internal-function/addNewUser");
 const isAuthenticated = require("./internal-function/isAuthenticated");
-const getUsers = require("./internal-function/getUsers");
 const getMessages = require("./internal-function/getMessages");
 const updateStatusUser = require("./internal-function/updateStatusUser");
 const sendMessage = require("./internal-function/sendMessage");
@@ -13,7 +12,6 @@ const PORT = 9090;
 const findId = require("./internal-function/findId");
 const _ = require("lodash");
 const logs = require("./helpers/logs");
-const { resolve } = require("path");
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -45,8 +43,6 @@ function main() {
 }
 
 function doRegistration(call, callback) {
-  //console.log(call);
-
   //add new User
   const user = addNewUser(call.request);
   // if user in db
@@ -80,16 +76,13 @@ function doLogin(call, callback) {
 }
 function doUserStream(call) {
   const { id } = call.request;
-  console.log(logs.data, "ID_USER_STREAM:", id);
   if (!id) return call.end();
   // change Status Online
   const online = updateStatusUser(id);
-  console.log("ONLINE", online);
   call.write({ users: online });
 
   if (userStreamClients.get(id) === undefined) {
     userStreamClients.set(id, call);
-    //console.log("MAPusers", userStreamClients);
   }
   //send usersList all the users in Map
   for (let [userId, userCall] of userStreamClients) {
@@ -98,6 +91,7 @@ function doUserStream(call) {
       userCall.write({ users: online });
     }
   }
+  //call.end();
 }
 
 function doChatStream(call) {
@@ -108,7 +102,6 @@ function doChatStream(call) {
 
   if (msgStreamClients.get(id) === undefined) {
     msgStreamClients.set(id, call);
-    // console.log("MAPMSGS", msgStreamClients);
   }
   // get messages list
   const messages = getMessages(id);
@@ -121,24 +114,21 @@ function doChatStream(call) {
       }
     }
   }
+  //call.end();
 }
 
 function doSendMessage(call, callback) {
   //id == idTo
   const { idFrom, idTo, message } = call.request;
-  //const users = getUsers(id);
 
-  const messagedb = sendMessage(idFrom, idTo, message);
-  console.log("MsgsDB with last msg", messagedb);
+  sendMessage(idFrom, idTo, message);
 
   for (let [userId, userCall] of msgStreamClients) {
     if (userId == idTo) {
       const callTo = msgStreamClients.get(userId);
-      console.log("CALLTO", callTo);
       doChatStream(callTo);
     }
   }
-
   callback(null);
 }
 
