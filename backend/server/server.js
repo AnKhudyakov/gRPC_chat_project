@@ -14,6 +14,7 @@ const findId = require("./internal-function/findId");
 const _ = require("lodash");
 const logs = require("./helpers/logs");
 const { resolve } = require("path");
+const fs = require('fs')
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -111,12 +112,13 @@ function doChatStream(call) {
     // console.log("MAPMSGS", msgStreamClients);
   }
   // get messages list
-  const messages = getMessages(id);
-  for (let [userId, userCall] of msgStreamClients) {
+  // const messages = getMessages(id);
+  const messages = getMessages(id)
+  for (const [userId, userCall] of msgStreamClients) {
     if (userId == id) {
       for (let msg of messages) {
         //send msg reciver
-        console.log(logs.data, "messages:", msg);
+        // console.log(logs.data, "messages:", msg);
         userCall.write(msg);
       }
     }
@@ -128,20 +130,36 @@ function doSendMessage(call, callback) {
   const { idFrom, idTo, message } = call.request;
   //const users = getUsers(id);
 
-  const messagedb = sendMessage(idFrom, idTo, message);
-  console.log("MsgsDB with last msg", messagedb);
+  // new Promise((res) => {
+  //   const messagedb = sendMessage(idFrom, idTo, message);
+  //   res(messagedb)
+  // })
+  //   .then(data => {
+  //     console.log("MsgsDB with last msg", data);
 
-  for (let [userId, userCall] of msgStreamClients) {
-    if (userId == idTo) {
-      const callTo = msgStreamClients.get(userId);
-      console.log("CALLTO", callTo);
-      doChatStream(callTo);
+  //     for (let [userId, userCall] of msgStreamClients) {
+  //       if (userId == idTo) {
+  //         const callTo = msgStreamClients.get(userId);
+  //         // console.log("CALLTO", callTo);
+  //         console.log('Начало стрима')
+  //         doChatStream(callTo);
+  //       }
+  //     }
+
+  //     callback(null);
+  //   })
+    sendMessage(idFrom, idTo, message);
+
+    for (let [userId, userCall] of msgStreamClients) {
+      if (userId == idTo) {
+        const callTo = msgStreamClients.get(userId);
+        // console.log("CALLTO", callTo);
+        console.log('Начало стрима')
+        doChatStream(callTo);
+      }
     }
-  }
-
-  callback(null);
+    callback(null);
 }
-
 function getServer() {
   const server = new grpc.Server();
   server.addService(auth.AuthService.service, {

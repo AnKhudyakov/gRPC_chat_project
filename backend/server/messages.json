@@ -1,6 +1,46 @@
 {
-  "messages": [
-    { "id": 1, "userId": 4, "sender_username": "test2", "message": "Hello" },
-    { "id": 2, "userId": 5, "sender_username": "test", "message": "Hi" }
-  ]
+	"messages": [
+		{
+			"id": 1,
+			"userId": 4,
+			"sender_username": "test2",
+			"message": "Hello"
+		},
+		{
+			"id": 2,
+			"userId": 5,
+			"sender_username": "test",
+			"message": "Hi"
+		},
+		{
+			"id": 396,
+			"idFrom": 5,
+			"idTo": 4,
+			"message": "1231232"
+		},
+		{
+			"id": 625,
+			"idFrom": 5,
+			"idTo": 4,
+			"message": "asdasd"
+		},
+		{
+			"id": 296,
+			"idFrom": 5,
+			"idTo": 4,
+			"message": "my soul"
+		},
+		{
+			"id": 189,
+			"idFrom": 5,
+			"idTo": 4,
+			"message": "abrakadabra"
+		},
+		{
+			"id": 966,
+			"idFrom": 5,
+			"idTo": 4,
+			"message": "12323"
+		}
+	]
 }
