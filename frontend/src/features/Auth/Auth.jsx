@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { setUser } from "../../app/authSlice";
 import styles from "./Auth.module.css";
 import { useForm } from "react-hook-form";
@@ -64,6 +65,7 @@ export function Auth() {
               />
             </div>
           </form>
+          <Link to="/">Back to login</Link>
         </div>
       ) : (
         <div></div>
