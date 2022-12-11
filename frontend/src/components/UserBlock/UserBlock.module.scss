@@ -1,19 +1,19 @@
-.person{
-    border-bottom: 2px solid;
-    border-top: 2px solid;
+.person {
+  border-bottom: 2px solid;
+  border-top: 2px solid;
+  display: flex;
+  justify-content: flex-start;
+  height: 50px;
+  &__info {
+    min-width: 30%;
+    padding: 5px;
     display: flex;
-    justify-content: start;
-    height: 50px;
-    &__info{
-        min-width: 30%;
-        padding: 5px;
-        display: flex;
-        align-items: start;
-        flex-direction: column;
-        border-right: 2px solid;
-    }
-    &__lastMess{
-        text-align: start;
-        font-size: 14px;
-    }
+    align-items: flex-start;
+    flex-direction: column;
+    border-right: 2px solid;
+  }
+  &__lastMess {
+    text-align: start;
+    font-size: 14px;
+  }
 }

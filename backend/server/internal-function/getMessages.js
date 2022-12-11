@@ -5,9 +5,9 @@ const messagedb = JSON.parse(fs.readFileSync("./messages.json", "UTF-8"));
 
 const getMessages = (id) => {
   //console.log(logs.data, "ID", id);
-  //find message with userId
+  //find message with userFrom
   const messages = messagedb.messages.filter((message) => {
-    return message.userId == id;
+    return message.idFrom == id || message.idTo == id;
   });
   //console.log(logs.data, "Messages_current_USER", messages);
   return messages;

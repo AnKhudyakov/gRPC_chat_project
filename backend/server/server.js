@@ -13,6 +13,7 @@ const PORT = 9090;
 const findId = require("./internal-function/findId");
 const _ = require("lodash");
 const logs = require("./helpers/logs");
+const { resolve } = require("path");
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -104,16 +105,6 @@ function doChatStream(call) {
   const { id } = call.request;
   console.log(logs.data, "ID_CHAT_STREAM:", id);
   if (!id) return call.end();
-  // change Status Online
-  // updateStatusUser(id);
-  //console.log(logs.test, "Messages 101", messages);
-  //console.log(call);
-
-  //need do unar request getMessages
-  /*
-  for (let msg of messages) {
-    call.write(msg);
-  }*/
 
   if (msgStreamClients.get(id) === undefined) {
     msgStreamClients.set(id, call);
@@ -122,7 +113,7 @@ function doChatStream(call) {
   // get messages list
   const messages = getMessages(id);
   for (let [userId, userCall] of msgStreamClients) {
-    if ((userId = id)) {
+    if (userId == id) {
       for (let msg of messages) {
         //send msg reciver
         console.log(logs.data, "messages:", msg);
@@ -134,12 +125,21 @@ function doChatStream(call) {
 
 function doSendMessage(call, callback) {
   //id == idTo
-  const { id, message } = call.request;
+  const { idFrom, idTo, message } = call.request;
   //const users = getUsers(id);
-  const messagedb = sendMessage(id, message);
+
+  const messagedb = sendMessage(idFrom, idTo, message);
   console.log("MsgsDB with last msg", messagedb);
-  doChatStream(call);
-  callback(null, err);
+
+  for (let [userId, userCall] of msgStreamClients) {
+    if (userId == idTo) {
+      const callTo = msgStreamClients.get(userId);
+      console.log("CALLTO", callTo);
+      doChatStream(callTo);
+    }
+  }
+
+  callback(null);
 }
 
 function getServer() {
@@ -153,23 +153,4 @@ function getServer() {
   });
   return server;
 }
-/*
-function runStreams() {
-    listenMainRoomChatUpdate((data, channel) => {
-      const msg = JSON.parse(data)
-      for (const [, stream] of userIdToMsgStream) {
-        stream.write(msg);
-      }
-    });
-    listenUserUpdateEvent(() =>
-      listUsers((err, users) => {
-        if (err) throw err;
-        for (const [, stream] of userIdToUserListStream) {
-          stream.write({ users });
-        }
-      })
-    );
-  }
-*/
-
 main();

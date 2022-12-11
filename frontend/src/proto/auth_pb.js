@@ -1588,8 +1588,9 @@ proto.auth.MessageRequest.prototype.toObject = function(opt_includeInstance) {
  */
 proto.auth.MessageRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    message: jspb.Message.getFieldWithDefault(msg, 2, "")
+    idfrom: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    idto: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    message: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -1628,9 +1629,13 @@ proto.auth.MessageRequest.deserializeBinaryFromReader = function(msg, reader) {
     switch (field) {
     case 1:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setId(value);
+      msg.setIdfrom(value);
       break;
     case 2:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setIdto(value);
+      break;
+    case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setMessage(value);
       break;
@@ -1663,17 +1668,24 @@ proto.auth.MessageRequest.prototype.serializeBinary = function() {
  */
 proto.auth.MessageRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getIdfrom();
   if (f !== 0) {
     writer.writeInt32(
       1,
       f
     );
   }
+  f = message.getIdto();
+  if (f !== 0) {
+    writer.writeInt32(
+      2,
+      f
+    );
+  }
   f = message.getMessage();
   if (f.length > 0) {
     writer.writeString(
-      2,
+      3,
       f
     );
   }
@@ -1681,10 +1693,10 @@ proto.auth.MessageRequest.serializeBinaryToWriter = function(message, writer) {
 
 
 /**
- * optional int32 id = 1;
+ * optional int32 idFrom = 1;
  * @return {number}
  */
-proto.auth.MessageRequest.prototype.getId = function() {
+proto.auth.MessageRequest.prototype.getIdfrom = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
@@ -1693,17 +1705,35 @@ proto.auth.MessageRequest.prototype.getId = function() {
  * @param {number} value
  * @return {!proto.auth.MessageRequest} returns this
  */
-proto.auth.MessageRequest.prototype.setId = function(value) {
+proto.auth.MessageRequest.prototype.setIdfrom = function(value) {
   return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
 /**
- * optional string message = 2;
+ * optional int32 idTo = 2;
+ * @return {number}
+ */
+proto.auth.MessageRequest.prototype.getIdto = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.auth.MessageRequest} returns this
+ */
+proto.auth.MessageRequest.prototype.setIdto = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional string message = 3;
  * @return {string}
  */
 proto.auth.MessageRequest.prototype.getMessage = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
@@ -1712,7 +1742,7 @@ proto.auth.MessageRequest.prototype.getMessage = function() {
  * @return {!proto.auth.MessageRequest} returns this
  */
 proto.auth.MessageRequest.prototype.setMessage = function(value) {
-  return jspb.Message.setProto3StringField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 

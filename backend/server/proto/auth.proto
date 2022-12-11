@@ -60,6 +60,7 @@ message StreamMessage {
 }
 
 message MessageRequest {
-  int32 id = 1;
-  string message = 2;
+  int32 idFrom = 1;
+  int32 idTo = 2;
+  string message = 3;
 }
