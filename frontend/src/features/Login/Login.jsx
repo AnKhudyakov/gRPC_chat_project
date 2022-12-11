@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { setUser } from "../../app/authSlice";
 import { setMessages, setUsers } from "../../app/chatSlice";
 import styles from "./Login.module.css";
@@ -115,6 +116,7 @@ export function Login() {
               />
             </div>
           </form>
+          <Link to='registration'>Registration</Link>
         </div>
       ) : (
         <div>
