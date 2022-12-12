@@ -12,6 +12,7 @@ const PORT = 9090;
 const findId = require("./internal-function/findId");
 const _ = require("lodash");
 const logs = require("./helpers/logs");
+const { ClientDuplexStreamImpl } = require("@grpc/grpc-js/build/src/call");
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -108,11 +109,9 @@ function doChatStream(call) {
   const messages = getMessages(id)
   for (const [userId, userCall] of msgStreamClients) {
     if (userId == id) {
-      for (let msg of messages) {
         //send msg reciver
-        // console.log(logs.data, "messages:", msg);
-        userCall.write(msg);
-      }
+        console.log(logs.data, "messages:", messages);
+        userCall.write({messages: messages})
     }
   }
   //call.end();
@@ -128,7 +127,6 @@ function doSendMessage(call, callback) {
   for (let [userId, userCall] of msgStreamClients) {
     if (userId == idTo) {
       const callTo = msgStreamClients.get(userId);
-      console.log("CALLTO", callTo);
       doChatStream(callTo);
     }
   }

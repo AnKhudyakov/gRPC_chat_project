@@ -53,10 +53,14 @@ message User {
   int32 access_token = 4;
 }
 
-message StreamMessage {
+message Message {
   int32 id = 1;
-  string sender_username = 2;
+  int32 idFrom = 2;
   string message = 3;
+}
+
+message StreamMessage {
+  repeated Message  messages = 1;
 }
 
 message MessageRequest {
