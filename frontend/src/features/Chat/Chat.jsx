@@ -4,15 +4,18 @@ import { setMessages, setMessageReq } from "../../app/chatSlice";
 import styles from "./Chat.module.css";
 import { client } from "../Auth/Auth";
 import { MessageRequest } from "../../proto/auth_pb";
-import { ChatList } from "../../components";
+import { ChatList, ChatWindow } from "../../components";
+import { useSearchParams } from "react-router-dom";
 
 export function Chat({ msgList }) {
   const [value, setValue] = useState("");
   const user = useSelector((state) => state.authPage.user);
   const dispatch = useDispatch();
+  const [params, setParams] = useSearchParams()
+  const chatRoomId = +params.get('chatRoomId')
 
   //only for test then test2 send message test
-  const id = 4;
+  
 
   const sendMessageHandler = (e) => {
     e.preventDefault();
@@ -20,18 +23,18 @@ export function Chat({ msgList }) {
     console.log(msgReq);
     msgReq.setMessage(value);
     msgReq.setIdfrom(user.id);
-    msgReq.setIdto(id);
+    msgReq.setIdto(chatRoomId);
     //msgReq.setId(user.id);
     client.sendMessage(msgReq, {}, (err, resp) => {});
     dispatch(
       setMessages({
         id: Math.round(Math.random() * 1000),
-        senderUsername: user.username,
+        idfrom: user.id,
+        idto: chatRoomId,
         message: value,
       })
     );
   };
-
   return (
     <div className={styles.container}>
       <div className={styles.chatList}>
@@ -40,14 +43,7 @@ export function Chat({ msgList }) {
       </div>
       <div className={styles.chatWindow}>
         <div>ChatWindow</div>
-        <div>
-          {msgList.map((msg) => (
-            <div className={styles.message} key={msg.id}>
-              <div>Sender:{msg.senderUsername}</div>
-              <div>Message{msg.message}</div>
-            </div>
-          ))}
-        </div>
+        <ChatWindow/>
         <div>
           <input
             type="text"

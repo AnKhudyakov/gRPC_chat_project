@@ -4,6 +4,7 @@
   display: flex;
   justify-content: flex-start;
   height: 50px;
+  cursor: pointer;
   &__info {
     min-width: 30%;
     padding: 5px;
@@ -16,4 +17,5 @@
     text-align: start;
     font-size: 14px;
   }
+  
 }

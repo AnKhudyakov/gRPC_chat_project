@@ -1422,7 +1422,8 @@ proto.auth.Message.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, 0),
     idfrom: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    message: jspb.Message.getFieldWithDefault(msg, 3, "")
+    idto: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    message: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -1468,6 +1469,10 @@ proto.auth.Message.deserializeBinaryFromReader = function(msg, reader) {
       msg.setIdfrom(value);
       break;
     case 3:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setIdto(value);
+      break;
+    case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setMessage(value);
       break;
@@ -1514,10 +1519,17 @@ proto.auth.Message.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
+  f = message.getIdto();
+  if (f !== 0) {
+    writer.writeInt32(
+      3,
+      f
+    );
+  }
   f = message.getMessage();
   if (f.length > 0) {
     writer.writeString(
-      3,
+      4,
       f
     );
   }
@@ -1561,11 +1573,29 @@ proto.auth.Message.prototype.setIdfrom = function(value) {
 
 
 /**
- * optional string message = 3;
+ * optional int32 idTo = 3;
+ * @return {number}
+ */
+proto.auth.Message.prototype.getIdto = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.auth.Message} returns this
+ */
+proto.auth.Message.prototype.setIdto = function(value) {
+  return jspb.Message.setProto3IntField(this, 3, value);
+};
+
+
+/**
+ * optional string message = 4;
  * @return {string}
  */
 proto.auth.Message.prototype.getMessage = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
 
@@ -1574,7 +1604,7 @@ proto.auth.Message.prototype.getMessage = function() {
  * @return {!proto.auth.Message} returns this
  */
 proto.auth.Message.prototype.setMessage = function(value) {
-  return jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 

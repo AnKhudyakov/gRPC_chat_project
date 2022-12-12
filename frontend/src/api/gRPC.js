@@ -53,13 +53,20 @@ export const gRPC = {
     (() => {
       //console.log("user.id", user.id);
       const chatStream = client.chatStream(chatReq);
+      console.log(chatStream)
       // console.log("chatStream", chatStream.on);
+        
       chatStream.on("data", (response) => {
         console.log("Starting chatStream");
         console.log("STREAM_RESPONSE", response);
-        const msgList = response.toObject();
-        dispatch(setMessages(msgList));
-        console.log("msgList", msgList);
+        // const msgList = []
+        // function getMsgs() {
+        //   return msgList.push(msg) 
+        // }
+        // getMsgs()
+        const msg = response.toObject();
+        
+        dispatch(setMessages(msg.messagesList));
       });
       chatStream.on("status", (status) => {
         console.log("STATUS", status);
