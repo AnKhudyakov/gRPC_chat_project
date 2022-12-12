@@ -1,8 +1,8 @@
 const fs = require("fs");
 const getUsers = require("./getUsers");
-const messagedb = JSON.parse(fs.readFileSync("./messages.json", "UTF-8"));
 
 const sendMessage = (idFrom, idTo, message) => {
+  const messagedb = JSON.parse(fs.readFileSync("./messages.json", "UTF-8"));
   console.log("ID", idFrom, idTo, message);
   //const users = getUsers(id)
   //const name = users[0].username
