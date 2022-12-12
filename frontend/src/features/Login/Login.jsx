@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { setUser } from "../../app/authSlice";
 import { setMessages, setUsers } from "../../app/chatSlice";
 import styles from "./Login.module.css";
@@ -25,7 +26,6 @@ export function Login() {
   const msgList = useSelector((state) => state.chatPage.messages);
   const user = useSelector((state) => state.authPage.user);
   const dispatch = useDispatch();
-  //const [msgList, setMsgList] = useState([]);
   const {
     register,
     handleSubmit,
@@ -42,40 +42,7 @@ export function Login() {
   useEffect(() => {
     if (!user) return;
     console.log("USER", user);
-    const chatReq = new StreamRequest();
-    chatReq.setId(user.id);
-
-    (() => {
-      //console.log("user.id", user.id);
-      const chatStream = client.chatStream(chatReq);
-      // console.log("chatStream", chatStream.on);
-      chatStream.on("data", (response) => {
-        console.log("Starting chatStream");
-        console.log("STREAM_RESPONSE", response);
-        const msgList = response.toObject();
-        //setMsgList((prev) => [...prev, msgList]);
-        dispatch(setMessages(msgList));
-        console.log("msgList", msgList);
-      });
-      chatStream.on("status", (status) => {
-        console.log("STATUS", status);
-      });
-      // setMsgList((prev) => [...prev, msgList]);
-      // dispatch(setMessages(msgList));
-    })();
-
-    (() => {
-      const userStream = client.userStream(chatReq);
-      
-      userStream.on("data", (response) => {
-        console.log("Sarting userStream")
-        console.log("USER_RESPONSE", response)
-        const usersList = response.toObject();
-        console.log('UsersList', usersList)
-        dispatch(setUsers(usersList.usersList));
-      });
-
-    })();
+    gRPC.UserChatStreams(user, dispatch);
   }, [user]);
 
   return (
@@ -115,6 +82,7 @@ export function Login() {
               />
             </div>
           </form>
+          <Link to="registration">Registration</Link>
         </div>
       ) : (
         <div>
