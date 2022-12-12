@@ -1,2 +1,4 @@
 node_modules
+./messages.json
 ./users.json
+.gitignore
