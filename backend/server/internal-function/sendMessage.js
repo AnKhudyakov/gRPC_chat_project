@@ -14,7 +14,7 @@ const sendMessage = (idFrom, idTo, message) => {
     idTo: idTo,
     message: message,
   });
-  fs.writeFileSync("messages.json", JSON.stringify(messagedb));
+  fs.writeFileSync("messages.json", JSON.stringify(messagedb, null, "\t"));
   return messagedb;
 };
 

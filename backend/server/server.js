@@ -12,6 +12,7 @@ const PORT = 9090;
 const findId = require("./internal-function/findId");
 const _ = require("lodash");
 const logs = require("./helpers/logs");
+const { ClientDuplexStreamImpl } = require("@grpc/grpc-js/build/src/call");
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -104,14 +105,13 @@ function doChatStream(call) {
     msgStreamClients.set(id, call);
   }
   // get messages list
-  const messages = getMessages(id);
-  for (let [userId, userCall] of msgStreamClients) {
+  // const messages = getMessages(id);
+  const messages = getMessages(id)
+  for (const [userId, userCall] of msgStreamClients) {
     if (userId == id) {
-      for (let msg of messages) {
         //send msg reciver
-        console.log(logs.data, "messages:", msg);
-        userCall.write(msg);
-      }
+        console.log(logs.data, "messages:", messages);
+        userCall.write({messages: messages})
     }
   }
   //call.end();
@@ -121,7 +121,8 @@ function doSendMessage(call, callback) {
   //id == idTo
   const { idFrom, idTo, message } = call.request;
 
-  sendMessage(idFrom, idTo, message);
+  const messagedb = sendMessage(idFrom, idTo, message);
+  console.log("MsgsDB with last msg", messagedb);
 
   for (let [userId, userCall] of msgStreamClients) {
     if (userId == idTo) {
@@ -129,9 +130,9 @@ function doSendMessage(call, callback) {
       doChatStream(callTo);
     }
   }
+
   callback(null);
 }
-
 function getServer() {
   const server = new grpc.Server();
   server.addService(auth.AuthService.service, {

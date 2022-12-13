@@ -1,0 +1,14 @@
+.message{
+    width: max-content;
+    background: rgb(179, 179, 179);
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 16px;
+    &__text{
+        margin: 0;
+        padding: 0;
+    }
+    &_client{
+        align-self: flex-end;
+    }
+}

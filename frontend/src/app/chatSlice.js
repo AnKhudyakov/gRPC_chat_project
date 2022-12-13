@@ -10,7 +10,12 @@ export const chatSlice = createSlice({
   initialState,
   reducers: {
     setMessages: (state, action) => {
-      state.messages = [...state.messages, action.payload];
+      console.log("redux: ", action.payload)
+      if (!Array.isArray(action.payload)) {
+        state.messages = [...state.messages, action.payload]
+      } else {
+        state.messages = action.payload;
+      }
     },
     setUsers: (state, action) => {
       state.users = [...action.payload];
