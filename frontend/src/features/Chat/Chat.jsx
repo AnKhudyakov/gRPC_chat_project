@@ -19,6 +19,7 @@ export function Chat({ msgList }) {
 
   const sendMessageHandler = (e) => {
     e.preventDefault();
+    if(value === '') return
     const msgReq = new MessageRequest();
     console.log(msgReq);
     msgReq.setMessage(value);
@@ -34,6 +35,7 @@ export function Chat({ msgList }) {
         message: value,
       })
     );
+    setValue('')
   };
   return (
     <div className={styles.container}>
