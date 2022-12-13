@@ -7,18 +7,15 @@ const stmt = db.prepare(`
             (id integer primary key, username NOT NULL, password NOT NULL, status)`);
 stmt.run();
 
-/*
-    const stmt = db.prepare("INSERT INTO, lorem VALUES (?)");
-    for (let i = 0; i < 10; i++) {
-        stmt.run("Ipsum " + i);
-    }
-    stmt.finalize();
+const stmtMsgs = db.prepare(`
+        CREATE TABLE IF NOT EXISTS messages
+            (id integer primary key, idFrom NOT NULL, idTo NOT NULL, message NOT NULL)`);
+stmtMsgs.run();
 
-    db.each("SELECT rowid AS id, info FROM lorem", (err, row) => {
-        console.log(row.id + ": " + row.info);
-    });
-    */
-//});
+//WARNING RESET DB!!!!!! DO NOT RUN unnecessarily
+//const stmtDelete = db.prepare(`DELETE FROM messages`);
+//stmtDelete.run();
+//////////WARNING!!/////////////
 
 class Users {
   static all() {
@@ -75,7 +72,24 @@ class Users {
   }
 }
 
+class Messages {
+  static getMessages(id) {
+    const stmt = db.prepare(
+      "SELECT * FROM messages WHERE idTo= ? OR idFrom= ?"
+    );
+    const messages = stmt.all(id, id);
+    return messages;
+  }
+  static create(data) {
+    const stmt = db.prepare(
+      "INSERT INTO messages (idFrom, idTo, message) VALUES (?, ?, ?)"
+    );
+    const info = stmt.run(data.idFrom, data.idTo, data.message);
+    console.log("Added following message: ", info.changes);
+  }
+}
+
 module.exports = db;
 module.exports.Users = Users;
-
+module.exports.Messages = Messages;
 //db.close();
