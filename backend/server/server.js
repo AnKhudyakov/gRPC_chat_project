@@ -95,7 +95,9 @@ function doUserStream(call) {
       userCall.write({ users: online });
     }
   }
-  //call.end();
+  call.on("cancelled", () => {
+    userStreamClients.delete(id);
+  });
 }
 
 function doChatStream(call) {
@@ -117,7 +119,9 @@ function doChatStream(call) {
       userCall.write({ messages: messages });
     }
   }
-  //call.end();
+  call.on("cancelled", () => {
+    msgStreamClients.delete(id);
+  });
 }
 
 function doSendMessage(call, callback) {
