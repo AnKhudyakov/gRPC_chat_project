@@ -1,0 +1,15 @@
+@import url('normalize.css');
+@import url("./fonts/fonts.css");
+@import url('./root.css');
+
+
+*{
+  box-sizing: border-box;
+
+}
+body{
+  text-align: center;
+  background: var(--color-black);
+  color: var(--color-white);
+  font-family: var(--font-default);
+}

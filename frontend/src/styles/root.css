@@ -1,0 +1,21 @@
+:root{
+
+    /* COLORS: colors-format ===  lowerCase HEX */
+    --color-white: #fff;
+    --color-black: #1b1b1b;
+	--color-smoke: #d6d6d6;
+	--color-gray: #767676;
+	--color-dark-gray: #5e5e5e;
+	--color-red: #e60023;
+
+
+    /* EFFECTS: 
+        example of use: box-shadow: var(--hover-effect-*) 
+    */
+
+    --hover-effect-dark: inset 0 0 1000px #00000030;
+	--hover-effect-light: inset 0 0 1000px #ffffff30;
+    
+    /* FONTS: */
+    --font-default: 'Roboto','Monserrat', sans-serif
+}
