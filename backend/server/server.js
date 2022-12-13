@@ -3,16 +3,10 @@ const grpc = require("@grpc/grpc-js");
 const protoLoader = require("@grpc/proto-loader");
 const getToken = require("./internal-function/getToken");
 const addNewUser = require("./internal-function/addNewUser");
-//const isAuthenticated = require("./internal-function/isAuthenticated");
-const getMessages = require("./internal-function/getMessages");
-const updateStatusUser = require("./internal-function/updateStatusUser");
-const sendMessage = require("./internal-function/sendMessage");
 const PROTO_PATH = __dirname + "/proto/auth.proto";
 const PORT = 9090;
-//const findId = require("./internal-function/findId");
 const _ = require("lodash");
 const logs = require("./helpers/logs");
-//const { ClientDuplexStreamImpl } = require("@grpc/grpc-js/build/src/call");
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -23,6 +17,8 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 const auth = protoDescriptor.auth;
 const Users = require("./bd").Users;
+const Messages = require("./bd").Messages;
+
 const msgStreamClients = new Map();
 const userStreamClients = new Map();
 
@@ -40,7 +36,6 @@ function main() {
       server.start();
     }
   );
-  // runStreams();
 }
 
 function doRegistration(call, callback) {
@@ -91,7 +86,7 @@ function doUserStream(call) {
   //send usersList all the users in Map
   for (let [userId, userCall] of userStreamClients) {
     if (userId != id) {
-      console.log(logs.data, "usersNew:", online);
+      //console.log(logs.data, "usersNew:", online);
       userCall.write({ users: online });
     }
   }
@@ -110,8 +105,7 @@ function doChatStream(call) {
     msgStreamClients.set(id, call);
   }
   // get messages list
-  // const messages = getMessages(id);
-  const messages = getMessages(id);
+  const messages = Messages.getMessages(id);
   for (const [userId, userCall] of msgStreamClients) {
     if (userId == id) {
       //send msg reciver
@@ -127,19 +121,17 @@ function doChatStream(call) {
 function doSendMessage(call, callback) {
   //id == idTo
   const { idFrom, idTo, message } = call.request;
-
-  const messagedb = sendMessage(idFrom, idTo, message);
-  console.log("MsgsDB with last msg", messagedb);
-
+  //added in DB
+  Messages.create({ idFrom, idTo, message });
   for (let [userId, userCall] of msgStreamClients) {
     if (userId == idTo) {
       const callTo = msgStreamClients.get(userId);
       doChatStream(callTo);
     }
   }
-
   callback(null);
 }
+
 function getServer() {
   const server = new grpc.Server();
   server.addService(auth.AuthService.service, {
