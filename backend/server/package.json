@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^8.0.1",
+    "grpc_chat_project": "file:../..",
     "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.20",
     "protoc-gen-grpc-web": "^1.4.1"
