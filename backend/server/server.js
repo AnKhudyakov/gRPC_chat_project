@@ -3,16 +3,16 @@ const grpc = require("@grpc/grpc-js");
 const protoLoader = require("@grpc/proto-loader");
 const getToken = require("./internal-function/getToken");
 const addNewUser = require("./internal-function/addNewUser");
-const isAuthenticated = require("./internal-function/isAuthenticated");
+//const isAuthenticated = require("./internal-function/isAuthenticated");
 const getMessages = require("./internal-function/getMessages");
 const updateStatusUser = require("./internal-function/updateStatusUser");
 const sendMessage = require("./internal-function/sendMessage");
 const PROTO_PATH = __dirname + "/proto/auth.proto";
 const PORT = 9090;
-const findId = require("./internal-function/findId");
+//const findId = require("./internal-function/findId");
 const _ = require("lodash");
 const logs = require("./helpers/logs");
-const { ClientDuplexStreamImpl } = require("@grpc/grpc-js/build/src/call");
+//const { ClientDuplexStreamImpl } = require("@grpc/grpc-js/build/src/call");
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -22,7 +22,7 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 });
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 const auth = protoDescriptor.auth;
-
+const Users = require("./bd").Users;
 const msgStreamClients = new Map();
 const userStreamClients = new Map();
 
@@ -61,11 +61,12 @@ function doRegistration(call, callback) {
 function doLogin(call, callback) {
   const { username, password } = call.request;
   //Authenticated user
-  if (isAuthenticated({ username, password }) === 0) {
+  const isAuthenticated = Users.findUser(username, password);
+  if (!isAuthenticated) {
     callback(new Error("Incorrect email or password"));
   }
   // find Id
-  const id = findId(username);
+  const { id } = Users.findId(username);
   //create new Token
   const token = getToken(call.request);
   // response
@@ -78,8 +79,10 @@ function doLogin(call, callback) {
 function doUserStream(call) {
   const { id } = call.request;
   if (!id) return call.end();
+  console.log(logs.data, "ID_USER_STREAM:", id);
   // change Status Online
-  const online = updateStatusUser(id);
+  Users.UpdateStatus(id);
+  const online = Users.findOnline();
   call.write({ users: online });
 
   if (userStreamClients.get(id) === undefined) {
@@ -92,7 +95,9 @@ function doUserStream(call) {
       userCall.write({ users: online });
     }
   }
-  //call.end();
+  call.on("cancelled", () => {
+    userStreamClients.delete(id);
+  });
 }
 
 function doChatStream(call) {
@@ -106,15 +111,17 @@ function doChatStream(call) {
   }
   // get messages list
   // const messages = getMessages(id);
-  const messages = getMessages(id)
+  const messages = getMessages(id);
   for (const [userId, userCall] of msgStreamClients) {
     if (userId == id) {
-        //send msg reciver
-        console.log(logs.data, "messages:", messages);
-        userCall.write({messages: messages})
+      //send msg reciver
+      console.log(logs.data, "messages:", messages);
+      userCall.write({ messages: messages });
     }
   }
-  //call.end();
+  call.on("cancelled", () => {
+    msgStreamClients.delete(id);
+  });
 }
 
 function doSendMessage(call, callback) {

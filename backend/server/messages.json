@@ -2,15 +2,21 @@
 	"messages": [
 		{
 			"id": 713,
-			"idFrom": 4,
-			"idTo": 5,
+			"idFrom": 1,
+			"idTo": 2,
 			"message": "Это test"
 		},
 		{
 			"id": 896,
-			"idFrom": 5,
-			"idTo": 4,
+			"idFrom": 2,
+			"idTo": 1,
 			"message": "а это test2"
+		},
+		{
+			"id": 273,
+			"idFrom": 2,
+			"idTo": 1,
+			"message": "123"
 		}
 	]
 }
