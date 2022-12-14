@@ -6,6 +6,7 @@ import { client } from "../Auth/Auth";
 import { MessageRequest } from "../../proto/auth_pb";
 import { ChatList, ChatWindow } from "../../components";
 import { useSearchParams } from "react-router-dom";
+import { BsThreeDots } from "react-icons/bs"
 
 export function Chat({ msgList }) {
   const [value, setValue] = useState("");
@@ -38,21 +39,28 @@ export function Chat({ msgList }) {
   return (
     <div className={styles.container}>
       <div className={styles.chatList}>
-        ChatList
+        <div className={styles.userInfo}>
+          <h5 className={styles.userInfoTitle}>gRPC Chat</h5>
+          <h5 className={styles.userInfoName}>{user.username}</h5>
+          <button className={styles.userInfoBtn}>Logout</button>
+        </div>
         <ChatList />
       </div>
       <div className={styles.chatWindow}>
-        <div>ChatWindow</div>
+        <div className={styles.chatHeader}>
+          <h4 className={styles.chatTitle}>Chat</h4>
+          <BsThreeDots className={styles.chatSettings}/>
+        </div>
         <ChatWindow/>
-        <div>
+        <div className={styles.sendMessage}>
           <input
             type="text"
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            className="sendMessage"
+            className={styles.msgInput}
           />
-          <button type="submit" onClick={sendMessageHandler}>
-            Submit
+          <button className={styles.msgBtn} type="submit" onClick={sendMessageHandler}>
+            Send
           </button>
         </div>
       </div>
