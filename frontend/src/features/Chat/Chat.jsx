@@ -7,19 +7,29 @@ import { MessageRequest } from "../../proto/auth_pb";
 import { ChatList, ChatWindow } from "../../components";
 import { useSearchParams } from "react-router-dom";
 import { BsThreeDots } from "react-icons/bs"
+import { useRef } from "react";
+import { useEffect } from "react";
 
 export function Chat({ msgList }) {
   const [value, setValue] = useState("");
   const user = useSelector((state) => state.authPage.user);
+  const messages = useSelector((state) => state.chatPage.messages);
   const dispatch = useDispatch();
   const [params, setParams] = useSearchParams()
   const chatRoomId = +params.get('chatRoomId')
+  const chatWindow = useRef()
 
   //only for test then test2 send message test
   
+  useEffect(() => {
+    const block = chatWindow.current
+    if (!block) return
+    block.scrollTop = block.scrollHeight
 
+  }, [chatWindow.current, messages, chatRoomId])
   const sendMessageHandler = (e) => {
     e.preventDefault();
+    if(value === '') return
     const msgReq = new MessageRequest();
     console.log(msgReq);
     msgReq.setMessage(value);
@@ -35,6 +45,7 @@ export function Chat({ msgList }) {
         message: value,
       })
     );
+    setValue('')
   };
   return (
     <div className={styles.container}>
@@ -51,18 +62,23 @@ export function Chat({ msgList }) {
           <h4 className={styles.chatTitle}>Chat</h4>
           <BsThreeDots className={styles.chatSettings}/>
         </div>
-        <ChatWindow/>
-        <div className={styles.sendMessage}>
-          <input
-            type="text"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            className={styles.msgInput}
-          />
-          <button className={styles.msgBtn} type="submit" onClick={sendMessageHandler}>
-            Send
-          </button>
-        </div>
+        <ChatWindow data={chatWindow} />
+        {!chatRoomId ?
+          (
+            <h1 style={{color: "var(--color-dark-gray)"}}>Please choose a chat room</h1>
+          ): 
+          <form className={styles.sendMessage} action="" onSubmit={sendMessageHandler}>
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              className={styles.msgInput}
+            />
+            <button className={styles.msgBtn} disabled={value === ''} type="submit"  onSubmit={sendMessageHandler}>
+              Send
+            </button>
+          </form>
+        }
       </div>
     </div>
   );
