@@ -19,28 +19,46 @@
 			"message": "123"
 		},
 		{
-			"id": 769,
-			"idFrom": 1,
-			"idTo": 2,
-			"message": "ww"
-		},
-		{
-			"id": 397,
-			"idFrom": 1,
-			"idTo": 2,
-			"message": "я как паровозик Томас"
-		},
-		{
-			"id": 853,
+			"id": 466,
 			"idFrom": 2,
-			"idTo": 1,
-			"message": "А я знаю продолжение.."
+			"idTo": 0,
+			"message": "Привет"
 		},
 		{
-			"id": 74,
+			"id": 31,
+			"idFrom": 1,
+			"idTo": 0,
+			"message": "Привет"
+		},
+		{
+			"id": 981,
+			"idFrom": 2,
+			"idTo": 0,
+			"message": "Как дела"
+		},
+		{
+			"id": 144,
+			"idFrom": 1,
+			"idTo": 0,
+			"message": "Эээй"
+		},
+		{
+			"id": 409,
+			"idFrom": 2,
+			"idTo": 0,
+			"message": "Ты чего"
+		},
+		{
+			"id": 920,
+			"idFrom": 1,
+			"idTo": 0,
+			"message": "Привет"
+		},
+		{
+			"id": 965,
 			"idFrom": 1,
 			"idTo": 2,
-			"message": "Крут"
+			"message": "Привет"
 		}
 	]
 }
