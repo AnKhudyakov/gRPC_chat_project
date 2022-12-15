@@ -46,52 +46,56 @@ export function Login() {
   }, [user]);
 
   return (
-    <div className={styles.container}>
-      {!user ? (
-        <div className={styles.wrapper}>
-          <h2>gRPC Chat</h2>
-          <div className={styles.title}>Login</div>
-          <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-            <div>
-              <input
-                defaultValue={"test"}
-                className={styles.input}
-                placeholder="enter username"
-                {...register("username", { required: true })}
-              />
-              {errors.username && errors.username.type === "required" && (
-                <p className={styles.error}>Please enter username</p>
-              )}
+    <div className={styles.wrapper_img}>
+      <div className={styles.back_img}>
+        <div className={styles.container}>
+          {!user ? (
+            <div className={styles.wrapper}>
+              <h2>gRPC Chat</h2>
+              <div className={styles.title}>Login</div>
+              <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+                <div>
+                  <input
+                    defaultValue={"test"}
+                    className={styles.input}
+                    placeholder="enter username"
+                    {...register("username", { required: true })}
+                  />
+                  {errors.username && errors.username.type === "required" && (
+                    <p className={styles.error}>Please enter username</p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    defaultValue={"test"}
+                    className={styles.input}
+                    type="password"
+                    placeholder="enter password"
+                    {...register("password", { required: true })}
+                  />
+                  {errors.password && errors.password.type === "required" && (
+                    <p className={styles.error}>Please enter password</p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    className={styles.button}
+                    type="submit"
+                    placeholder="Submit"
+                  />
+                </div>
+              </form>
+              <div>
+                Don't have an account? <Link to="registration">Register</Link>
+              </div>
             </div>
+          ) : (
             <div>
-              <input
-                defaultValue={"test"}
-                className={styles.input}
-                type="password"
-                placeholder="enter password"
-                {...register("password", { required: true })}
-              />
-              {errors.password && errors.password.type === "required" && (
-                <p className={styles.error}>Please enter password</p>
-              )}
+              <Chat msgList={msgList} />
             </div>
-            <div>
-              <input
-                className={styles.button}
-                type="submit"
-                placeholder="Submit"
-              />
-            </div>
-          </form>
-          <div>
-            Don't have an account? <Link to="registration">Register</Link>
-          </div>
+          )}
         </div>
-      ) : (
-        <div>
-          <Chat msgList={msgList} />
-        </div>
-      )}
+      </div>
     </div>
   );
 }
