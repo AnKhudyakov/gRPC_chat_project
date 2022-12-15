@@ -6,8 +6,11 @@
   gap: 10px;
   color: white;
   cursor: pointer;
+  &_active{
+    box-shadow: var(--hover-effect-light);
+  }
   &:hover {
-    background-color: #2f2d52;
+    box-shadow: var(--hover-effect-light);
   }
   &__info {
     min-width: 30%;

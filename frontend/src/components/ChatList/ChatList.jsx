@@ -13,11 +13,15 @@ const ChatList = () => {
         <div className={styles.container}>
             <ul className={styles.chatList}>
                 {users
-                    ? users.map((user, i) => (
-                        <li className={styles.chatList_item} onClick={() => setParams({chatRoomId: user.id})} key={`KEY: ${i}`}>
-                            <UserBlock data={user} />
-                        </li>
-                    ))
+                    ? users.map((user, i) => {
+                        user = { ...user }        
+                        user.active = +params.get('chatRoomId') === user.id
+                        return (
+                            <li className={styles.chatList_item} onClick={() => setParams({ chatRoomId: user.id })} key={`KEY: ${i}`}>
+                                <UserBlock data={user} />
+                            </li>
+                        )
+                    })
                     : null
                 }
             </ul>
