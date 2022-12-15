@@ -33,8 +33,9 @@ export function Auth() {
   return (
     <div className={styles.container}>
       {!user ? (
-        <div>
-          <div>Registation</div>
+        <div className={styles.wrapper}>
+          <h2>gRPC Chat</h2>
+          <div className={styles.title}>Registration</div>
           <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
             <div>
               <input
@@ -59,7 +60,7 @@ export function Auth() {
             </div>
             <div>
               <input
-                className={styles.input}
+                className={styles.button}
                 type="submit"
                 placeholder="Submit"
               />

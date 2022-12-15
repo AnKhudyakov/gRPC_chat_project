@@ -17,6 +17,48 @@
 			"idFrom": 2,
 			"idTo": 1,
 			"message": "123"
+		},
+		{
+			"id": 466,
+			"idFrom": 2,
+			"idTo": 0,
+			"message": "Привет"
+		},
+		{
+			"id": 31,
+			"idFrom": 1,
+			"idTo": 0,
+			"message": "Привет"
+		},
+		{
+			"id": 981,
+			"idFrom": 2,
+			"idTo": 0,
+			"message": "Как дела"
+		},
+		{
+			"id": 144,
+			"idFrom": 1,
+			"idTo": 0,
+			"message": "Эээй"
+		},
+		{
+			"id": 409,
+			"idFrom": 2,
+			"idTo": 0,
+			"message": "Ты чего"
+		},
+		{
+			"id": 920,
+			"idFrom": 1,
+			"idTo": 0,
+			"message": "Привет"
+		},
+		{
+			"id": 965,
+			"idFrom": 1,
+			"idTo": 2,
+			"message": "Привет"
 		}
 	]
 }

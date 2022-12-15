@@ -48,8 +48,9 @@ export function Login() {
   return (
     <div className={styles.container}>
       {!user ? (
-        <div>
-          <div>Login</div>
+        <div className={styles.wrapper}>
+          <h2>gRPC Chat</h2>
+          <div className={styles.title}>Login</div>
           <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
             <div>
               <input
@@ -76,13 +77,15 @@ export function Login() {
             </div>
             <div>
               <input
-                className={styles.input}
+                className={styles.button}
                 type="submit"
                 placeholder="Submit"
               />
             </div>
           </form>
-          <Link to="registration">Registration</Link>
+          <div>
+            Don't have an account? <Link to="registration">Register</Link>
+          </div>
         </div>
       ) : (
         <div>
